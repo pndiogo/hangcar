@@ -1,0 +1,44 @@
+.btn {
+    padding: 10px 25px;
+    background: $color-white;
+    border: none;
+    border-radius: 20px;
+    color: $color-primary;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: $transition-primary;
+
+    &:focus {
+        outline: 0;
+    }
+
+    &:active {
+        transform: scale(0.98);
+    }
+
+    &.btn-primary {
+        background: $color-accent;
+    }
+
+    &.btn-small {
+        padding: 8px 16px;
+        font-size: 14px;
+    }
+
+    &:hover {
+        color: $color-white;
+        background: $color-primary;
+    }
+
+    &:disabled {
+        opacity: 0.7;
+        //pointer-events: none;
+        cursor: not-allowed;
+
+        &:hover {
+            background: $color-accent;
+            color: $color-primary;
+        }
+    }
+}

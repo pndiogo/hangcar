@@ -5,6 +5,8 @@ import router from './router';
 import store from './store';
 import './assets/styles/app.scss';
 
+// import './assets/js/game';
+
 Vue.config.productionTip = false;
 
 new Vue({

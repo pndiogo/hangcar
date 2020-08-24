@@ -1,0 +1,96 @@
+.team {
+    padding: 20px;
+    background: $color-white;
+    color: $color-primary;
+    border-radius: 5px;
+    box-shadow: $shadow-primary;
+
+    .title-container {
+        position: relative;
+
+        > .title {
+            margin-top: 0;
+        }
+
+        > .title-action {
+            position: absolute;
+            top: 2px;
+            right: -3px;
+            padding: 5px;
+            background: transparent;
+            border: 0;
+            color: $color-primary;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: $transition-primary;
+
+            &:focus {
+                outline: 0;
+            }
+
+            &:hover {
+                color: $color-red;
+            }
+
+            &:active {
+                color: $color-primary;
+            }
+        }
+    }
+    
+    .team-input {
+        padding: 8px;
+        border-radius: 4px;
+        border: 1px solid $color-primary;
+        font-size: 16px;
+
+        &.name {
+            width: calc(50% - 10px);    
+        }
+    }
+}
+
+.words-container {
+    > .titles,
+    > .words {
+        display: flex;
+
+        > .title,
+        > .word {
+            flex: 1;
+
+            &:first-child {
+                margin-right: 20px;
+            }
+        }
+        
+    }
+
+    .action {
+        margin-top: 20px;
+    }
+
+    .selected-words-list {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 1px solid $color-main-background;
+
+        .selected-words {
+            display: flex;
+            font-weight: 700;
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+
+            > .selected-word {
+                flex: 1;
+    
+                &:first-child {
+                    margin-right: 20px;
+                }
+            }
+        }
+    }
+}

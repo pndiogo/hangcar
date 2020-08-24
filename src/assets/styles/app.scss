@@ -1,1 +1,12 @@
+// Global
+@import 'variables.scss';
 @import 'base';
+
+// Components
+@import './components/team';
+@import './components/buttons';
+
+
+// Views
+@import './views/game';
+@import './views/settings';
