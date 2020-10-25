@@ -5,6 +5,10 @@
     border-radius: 5px;
     box-shadow: $shadow-primary;
 
+    + .team {
+        margin-top: 40px;
+    }
+
     .title-container {
         position: relative;
 
@@ -12,33 +16,13 @@
             margin-top: 0;
         }
 
-        > .title-action {
+        > .btn-icon.title-action {
             position: absolute;
             top: 2px;
             right: -3px;
-            padding: 5px;
-            background: transparent;
-            border: 0;
-            color: $color-primary;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: $transition-primary;
-
-            &:focus {
-                outline: 0;
-            }
-
-            &:hover {
-                color: $color-red;
-            }
-
-            &:active {
-                color: $color-primary;
-            }
         }
     }
-    
+
     .team-input {
         padding: 8px;
         border-radius: 4px;
@@ -46,51 +30,60 @@
         font-size: 16px;
 
         &.name {
-            width: calc(50% - 10px);    
+            width: calc(50% - 10px);
         }
     }
-}
 
-.words-container {
-    > .titles,
-    > .words {
-        display: flex;
-
-        > .title,
-        > .word {
-            flex: 1;
-
-            &:first-child {
-                margin-right: 20px;
-            }
+    .words-container {
+        > .title {
+            margin: 30px 0 0;
         }
-        
-    }
 
-    .action {
-        margin-top: 20px;
-    }
-
-    .selected-words-list {
-        margin-top: 20px;
-        padding-top: 20px;
-        border-top: 1px solid $color-main-background;
-
-        .selected-words {
+        > .sub-titles,
+        > .words {
             display: flex;
-            font-weight: 700;
 
-            &:not(:last-child) {
-                margin-bottom: 10px;
-            }
-
-            > .selected-word {
+            > .sub-title,
+            > .word {
                 flex: 1;
-    
+
                 &:first-child {
                     margin-right: 20px;
                 }
             }
+
+            > .sub-title {
+                margin-bottom: 0;
+
+                &:last-child {
+                    margin-right: 30px;
+                }
+            }
+            
+
+            > .btn-icon {
+              margin-left: 10px;
+            }
+
+            + .words {
+                margin-top: 10px;
+            }
         }
+
+        .action {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+    }
+
+    .actions-container {
+        display: flex;
+        justify-content: flex-end;
+        margin-top: 20px;
+    }
+
+    .error-message {
+        color: $color-red;
     }
 }

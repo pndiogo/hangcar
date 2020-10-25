@@ -1,3 +1,7 @@
+.settings {
+    padding-bottom: 40px;
+}
+
 .teams-container {
     display: grid;
     grid-template-columns: 1fr;
@@ -6,5 +10,17 @@
 
     @media (min-width: $isDesktopSmall) {
         grid-template-columns: repeat(2, 1fr);
+    }
+
+    .wrapper-empty {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        height: 300px;
+
+        > img {
+            opacity: .9;
+        }
     }
 }

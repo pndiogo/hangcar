@@ -17,8 +17,43 @@
         transform: scale(0.98);
     }
 
+    &:disabled {
+        opacity: 0.7;
+        //pointer-events: none;
+        cursor: not-allowed;
+    }
+
     &.btn-primary {
         background: $color-accent;
+
+        &:hover {
+            background: $color-primary;
+            color: $color-white;
+        }
+
+        &:disabled {
+            &:hover {
+                background: $color-accent;
+                color: $color-primary;
+            }
+        }
+    }
+
+    &.btn-secondary {
+        background: $color-secondary;
+        color: $color-white;
+
+        &:hover {
+            background: $color-primary;
+            color: $color-white;
+        }
+
+        &:disabled {
+            &:hover {
+                background: $color-secondary;
+                color: $color-white;
+            }
+        }
     }
 
     &.btn-small {
@@ -26,19 +61,32 @@
         font-size: 14px;
     }
 
-    &:hover {
-        color: $color-white;
-        background: $color-primary;
+}
+
+.btn-icon {
+    padding: 5px;
+    background: transparent;
+    border: 0;
+    color: $color-primary;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: $transition-primary;
+
+    &:focus {
+        outline: 0;
     }
 
-    &:disabled {
-        opacity: 0.7;
-        //pointer-events: none;
-        cursor: not-allowed;
+    &:hover {
+        color: $color-red;
+    }
 
-        &:hover {
-            background: $color-accent;
-            color: $color-primary;
-        }
+    &:active {
+        color: $color-primary;
+    }
+
+    > img {
+        width: 40px;
+        height: 40px;
     }
 }
