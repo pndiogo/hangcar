@@ -1,0 +1,17 @@
+.app-input-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    + .app-input-wrapper {
+        margin-top: 10px;
+    }
+}
+
+.app-input {
+    width: calc(50% - 30px);
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid $color-primary;
+    font-size: 16px;
+}

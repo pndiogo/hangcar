@@ -1,9 +1,13 @@
 <template>
-  <div class="team">
+  <div class="team-container">
     <div class="title-container">
       <h2 class="title">Equipa *</h2>
+      <button class="btn-icon title-action" @click="deleteTeam">X</button>
+    </div>
+
+    <div class="body-container">
       <input
-        class="name team-input"
+        class="app-input name-input"
         type="text"
         placeholder="Nome da equipa"
         v-model="name"
@@ -11,10 +15,6 @@
         :disabled="!isEditMode"
       />
       <p v-if="showNameError" class="error-message">Nome da equipa é obrigatório</p>
-      <button class="btn-icon title-action" @click="deleteTeam">X</button>
-    </div>
-
-    <div class="words-container">
       <h3 v-if="words.length > 0" class="title">Palavras *</h3>
       <div v-if="words.length > 0" class="sub-titles">
         <h4 class="sub-title">Categoria *</h4>
@@ -22,7 +22,7 @@
       </div>
       <div class="words" v-for="(word, index) in words" :key="word.id">
         <input
-          class="word team-input"
+          class="app-input word-input"
           type="text"
           placeholder="Inserir categoria"
           v-model.trim="words[index].category"
@@ -30,7 +30,7 @@
           :disabled="!isEditMode"
         />
         <input
-          class="word team-input"
+          class="app-input word-input"
           type="text"
           placeholder="Inserir palavra"
           v-model.trim="words[index].word"
@@ -44,9 +44,9 @@
 
       <p v-if="showWordsError" class="error-message">Categoria e palavra são obrigatórios</p>
 
-      <div v-if="isEditMode" class="action">
+      <div v-if="isEditMode" class="actions-container">
         <button class="btn btn-primary btn-small" @click="addNewWord">
-          Adicionar palavra +
+          Adicionar palavra
         </button>
       </div>
     </div>
@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions } from 'vuex';
 import { nanoid } from 'nanoid';
 
 export default {
@@ -84,14 +84,13 @@ export default {
     };
   },
   computed: {
-    ...mapGetters({
-      getTeamCompleteStatusById: 'getTeamCompleteStatusById',
-    }),
     isNameValid() {
       return this.name.length > 0;
     },
     areWordsValid() {
-      return this.team.words.every((word) => word.category && word.word);
+      return (
+        this.team.words.length > 0 && this.team.words.every((word) => word.category && word.word)
+      );
     },
   },
   created() {
@@ -109,8 +108,8 @@ export default {
   }, */
   methods: {
     ...mapActions({
-      updateTeam: 'updateTeam',
-      deleteTeamById: 'deleteTeamById',
+      updateTeam: 'teams/updateTeam',
+      deleteTeamById: 'teams/deleteTeamById',
     }),
     addNewWord() {
       this.words.push({
@@ -118,9 +117,11 @@ export default {
         category: '',
         word: '',
       });
+
+      this.showWordsError = false;
     },
-    deleteWord(wordId) {
-      const foundWordIndex = this.words.findIndex((word) => word.id === wordId);
+    deleteWord(id) {
+      const foundWordIndex = this.words.findIndex((word) => word.id === id);
       this.words.splice(foundWordIndex, 1);
 
       this.showWordsError = false;
