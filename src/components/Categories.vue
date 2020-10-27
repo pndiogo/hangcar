@@ -1,7 +1,10 @@
 <template>
   <div>
     <div class="title-container">
-      <h2 class="title">Categorias *</h2>
+      <h2 class="title">Categorias</h2>
+         <button class="btn btn-primary" :disabled="!isEditMode" @click="addNewCategory">
+          Adicionar categoria
+        </button>
     </div>
 
     <div class="body-container">
@@ -14,12 +17,6 @@
           :disabled="!isEditMode"
         />
         <button v-if="isEditMode" class="btn-icon" @click="deleteCategory(category.id)">X</button>
-      </div>
-
-      <div v-if="isEditMode" class="actions-container">
-        <button class="btn btn-primary btn-small" @click="addNewCategory">
-          Adicionar categoria
-        </button>
       </div>
     </div>
 
@@ -52,15 +49,16 @@ export default {
     }),
   },
   created() {
-    if (this.allCategories.length > 0) {
+    /*  if (this.allCategories.length > 0) {
       this.categories = [...this.allCategories];
-    } else {
-      this.addNewCategory();
-    }
+    } else { */
+    this.addNewCategory();
+    /*  } */
   },
   methods: {
     ...mapActions({
-      addCategories: 'categories/addCategories',
+      updateCategories: 'categories/updateCategories',
+      removeWordDeletedCategoryFromTeams: 'teams/removeWordDeletedCategoryFromTeams',
     }),
     addNewCategory() {
       this.categories.push({
@@ -70,21 +68,22 @@ export default {
     },
     deleteCategory(id) {
       const foundCategoryIndex = this.categories.findIndex((category) => category.id === id);
+      this.removeWordDeletedCategoryFromTeams(this.categories[foundCategoryIndex].id);
       this.categories.splice(foundCategoryIndex, 1);
     },
     saveCategories() {
-      if (this.validation()) {
+      if (this.validation(this.categories)) {
         //* remove categories with no name
         this.categories = this.categories.filter((category) => category.name);
 
-        this.addCategories(this.categories);
+        this.updateCategories([...this.categories]);
 
         this.toggleEditMode();
       }
     },
-    validation() {
-      const isValid = this.categories.length > 0
-        && this.categories.some((category) => category.name);
+    validation(categories) {
+      const isValid = categories.length > 0
+        && categories.some((category) => category.name);
 
       return isValid;
     },

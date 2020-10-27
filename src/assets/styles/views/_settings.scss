@@ -1,10 +1,17 @@
 .teams-container {
     display: grid;
     grid-template-columns: 1fr;
-    gap: 15px;
+    gap: 40px;
     margin-top: 20px;
 
     @media (min-width: $isDesktopSmall) {
         grid-template-columns: repeat(2, 1fr);
     }
+}
+
+.team-container {
+    padding: 15px;
+    border: 1px solid $color-primary;
+    border-radius: 5px;
+    box-shadow: $shadow-secondary;
 }

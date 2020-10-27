@@ -1,7 +1,7 @@
 <template>
   <div class="team-container">
     <div class="title-container">
-      <h2 class="title">Equipa *</h2>
+      <h3 class="title">Equipa</h3>
       <button class="btn-icon title-action" @click="deleteTeam">X</button>
     </div>
 
@@ -14,41 +14,34 @@
         @input="showNameError = false"
         :disabled="!isEditMode"
       />
-      <p v-if="showNameError" class="error-message">Nome da equipa é obrigatório</p>
-      <h3 v-if="words.length > 0" class="title">Palavras *</h3>
-      <div v-if="words.length > 0" class="sub-titles">
-        <h4 class="sub-title">Categoria *</h4>
-        <h4 class="sub-title">Palavra *</h4>
+      <p v-if="showNameError" class="error-message">Nome é obrigatório</p>
+
+      <h3 v-if="words.length > 0" class="title">Palavras</h3>
+
+      <div class="sub-titles">
+        <h4 class="sub-title">Categoria</h4>
+        <h4 class="sub-title">Palavra</h4>
       </div>
-      <div class="words" v-for="(word, index) in words" :key="word.id">
+
+      <div class="words" v-for="category in allCategories" :key="category.id">
         <input
           class="app-input word-input"
           type="text"
-          placeholder="Inserir categoria"
-          v-model.trim="words[index].category"
-          @input="showWordsError = false"
-          :disabled="!isEditMode"
+          placeholder="Categoria"
+          disabled="true"
+          :value="category.name"
         />
         <input
+          v-model.trim="words[category.id].name"
           class="app-input word-input"
           type="text"
           placeholder="Inserir palavra"
-          v-model.trim="words[index].word"
           @input="showWordsError = false"
           :disabled="!isEditMode"
         />
-        <button v-if="isEditMode" class="btn-icon word-action" @click="deleteWord(word.id)">
-          X
-        </button>
       </div>
 
-      <p v-if="showWordsError" class="error-message">Categoria e palavra são obrigatórios</p>
-
-      <div v-if="isEditMode" class="actions-container">
-        <button class="btn btn-primary btn-small" @click="addNewWord">
-          Adicionar palavra
-        </button>
-      </div>
+      <p v-if="showWordsError" class="error-message">Palavras são obrigatórias</p>
     </div>
 
     <div class="actions-container">
@@ -63,7 +56,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 import { nanoid } from 'nanoid';
 
 export default {
@@ -77,39 +70,52 @@ export default {
   data() {
     return {
       name: null,
-      words: null,
+      words: {},
       showNameError: false,
       showWordsError: false,
       isEditMode: true,
     };
   },
   computed: {
-    isNameValid() {
-      return this.name.length > 0;
-    },
-    areWordsValid() {
-      return (
-        this.team.words.length > 0 && this.team.words.every((word) => word.category && word.word)
-      );
+    ...mapGetters({
+      allCategories: ['categories/getAllCategories'],
+    }),
+  },
+  watch: {
+    allCategories: {
+      immediate: true,
+      handler(newCategories) {
+        newCategories.forEach((category) => {
+          if (!this.words[category.id]) {
+            this.words[category.id] = {
+              id: nanoid(),
+              name: '',
+              category,
+            };
+
+            this.isEditMode = true;
+            this.setTeamToInvalidById(this.team);
+          }
+        });
+
+        // eslint-disable-next-line
+        for (const word in this.words) {
+          const x = newCategories.findIndex((category) => category.id === word);
+          if (x === -1) {
+            delete this.words[word];
+          }
+        }
+      },
     },
   },
   created() {
     this.name = this.team.name;
-    this.words = this.team.words;
   },
-  /* watch: {
-    team: {
-      handler(newValue) {
-        this.words = [...newValue.words];
-      },
-      immediate: true,
-      deep: true,
-    },
-  }, */
   methods: {
     ...mapActions({
       updateTeam: 'teams/updateTeam',
       deleteTeamById: 'teams/deleteTeamById',
+      setTeamToInvalidById: 'teams/setTeamToInvalidById',
     }),
     addNewWord() {
       this.words.push({
@@ -120,38 +126,38 @@ export default {
 
       this.showWordsError = false;
     },
-    deleteWord(id) {
-      const foundWordIndex = this.words.findIndex((word) => word.id === id);
-      this.words.splice(foundWordIndex, 1);
-
-      this.showWordsError = false;
-    },
     deleteTeam() {
       this.deleteTeamById({
         id: this.team.id,
       });
     },
     saveTeam() {
-      if (this.validation()) {
+      const { name } = this;
+      const words = Object.values(this.words);
+
+      if (this.validation(name, words)) {
         this.updateTeam({
           id: this.team.id,
-          name: this.name,
-          words: this.words,
+          name,
+          words,
         });
 
         this.toggleEditMode();
       }
     },
-    validation() {
-      if (!this.isNameValid) {
+    validation(name, words) {
+      const isNameValid = name.length > 0;
+      const areWordsValid = words.every((word) => word.name);
+
+      if (!isNameValid) {
         this.showNameError = true;
       }
 
-      if (!this.areWordsValid) {
+      if (!areWordsValid) {
         this.showWordsError = true;
       }
 
-      return this.isNameValid && this.areWordsValid;
+      return isNameValid && areWordsValid;
     },
     toggleEditMode() {
       this.isEditMode = !this.isEditMode;

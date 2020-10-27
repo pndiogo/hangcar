@@ -2,18 +2,13 @@
   <main class="main-container settings-container">
     <div class="page-header">
       <h1>Configurar jogo</h1>
-      <button class="btn btn-primary" @click="addNewTeam">Adicionar equipa</button>
     </div>
 
     <section class="section-container categories-container">
       <appCategories></appCategories>
     </section>
 
-    <app-empty-container v-if="allTeams.length === 0">
-      Não existem equipas criadas
-    </app-empty-container>
-
-    <section v-else class="section-container teams-container">
+    <section class="section-container">
       <app-teams></app-teams>
     </section>
   </main>

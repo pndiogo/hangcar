@@ -4,6 +4,8 @@
       <router-link to="/">Jogar</router-link> |
       <router-link to="/settings">Configurar</router-link>
     </nav>
-    <router-view/>
+      <keep-alive>
+         <router-view />
+      </keep-alive>
   </div>
 </template>

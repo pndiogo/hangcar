@@ -20,6 +20,7 @@ h1 {
 .app {
     width: 80%;
     max-width: 1024px;
+    padding-bottom: 60px;
 }
 
 .nav {
@@ -44,7 +45,7 @@ h1 {
 }
 
 .section-container {
-    padding: 20px 20px 40px;
+    padding: 40px;
     background: $color-white;
     color: $color-primary;
     border-radius: 5px;
