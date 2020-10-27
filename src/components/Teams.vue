@@ -26,9 +26,6 @@ export default {
     appTeam: () => import('../components/Team'),
     appEmptyContainer: () => import('../components/EmptyContainer'),
   },
-  data() {
-    return {};
-  },
   computed: {
     ...mapGetters({
       allTeams: ['teams/getAllTeams'],

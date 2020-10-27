@@ -5,12 +5,23 @@ import { nanoid } from 'nanoid';
 // state
 const state = () => ({
   teams: [],
+  teamTurnIndex: null,
+  wordTurnIndex: null,
 });
 
 // getters
 const getters = {
   getAllTeams: (state) => state.teams,
   getTeamById: (state) => (payload) => state.teams.find((team) => team.id === payload),
+  getTotalTeams: (state) => state.teams.length,
+  getPlayingTeam: (state) => state.teams.find((team) => team.isPlaying),
+  getPlayingTeamActiveWord: (state) => {
+    const playingTeam = state.teams.find((team) => team.isPlaying);
+    const activeWord = playingTeam.words.find((word) => word.isActive);
+
+    return activeWord;
+  },
+
 };
 
 // mutations
@@ -21,6 +32,7 @@ const mutations = {
       name: '',
       words: [],
       isValid: false,
+      isPlaying: false,
     });
   },
   UPDATE_TEAM: (state, payload) => {
@@ -45,6 +57,25 @@ const mutations = {
       }
     });
   },
+  SET_START_PLAYING_STATUS: (state) => {
+    if (state.teams.length > 0) {
+      state.teams.forEach((team, index) => {
+        team.words.forEach((word) => {
+          word.isActive = false;
+        });
+
+        if (index === 0) {
+          team.isPlaying = true;
+          team.words[0].isActive = true;
+        } else {
+          team.isPlaying = false;
+        }
+      });
+
+      state.teamTurnIndex = 0;
+      state.wordTurnIndex = 0;
+    }
+  },
 };
 
 // actions
@@ -64,7 +95,9 @@ const actions = {
   removeWordDeletedCategoryFromTeams: ({ commit }, payload) => {
     commit('REMOVE_WORD_CATEGORY', payload);
   },
-
+  setStartPlayingStatus: ({ commit }) => {
+    commit('SET_START_PLAYING_STATUS');
+  },
 };
 
 export default {

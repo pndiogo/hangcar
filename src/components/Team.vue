@@ -1,5 +1,5 @@
 <template>
-  <div class="team-container">
+  <div class="team-container" :class="{'is-invalid': !this.team.isValid, 'is-editing': isEditMode}">
     <div class="title-container">
       <h3 class="title">Equipa</h3>
       <button class="btn-icon title-action" @click="deleteTeam">X</button>
@@ -91,6 +91,7 @@ export default {
               id: nanoid(),
               name: '',
               category,
+              isActive: false,
             };
 
             this.isEditMode = true;
@@ -140,6 +141,7 @@ export default {
           id: this.team.id,
           name,
           words,
+          isActive: false,
         });
 
         this.toggleEditMode();
