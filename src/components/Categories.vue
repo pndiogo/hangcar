@@ -2,9 +2,9 @@
   <div>
     <div class="title-container">
       <h2 class="title">Categorias</h2>
-         <button class="btn btn-primary" :disabled="!isEditMode" @click="addNewCategory">
-          Adicionar categoria
-        </button>
+      <button class="btn btn-primary" :disabled="!isEditMode" @click="addNewCategory">
+        Adicionar categoria
+      </button>
     </div>
 
     <div class="body-container">

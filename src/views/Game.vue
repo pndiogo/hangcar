@@ -22,7 +22,7 @@
         <circle cx="315" cy="220" r="35" class="figure-part" />
       </svg>
 
-      <div class="status-container">
+      <div v-if="getIsPlayable" class="status-container">
         <div class="player">
           <h4>Sua vez</h4>
           <h2>Equipa {{ getPlayingTeam && getPlayingTeam.name }}</h2>
@@ -33,12 +33,20 @@
       </div>
     </section>
 
-    <section class="game-word-container">
+    <section v-if="getIsPlayable" class="game-word-container">
       <p>Insira uma letra</p>
       <div class="wrong-letters-container">
         <div id="wrong-letters"></div>
       </div>
-      <div class="word" id="word"></div>
+      <div class="word" id="word" ref="wordEl">
+      </div>
+    </section>
+
+    <section v-if="!getIsPlayable" class="game-not-ready-container">
+      <h2 class="title">É preciso configurar o jogo</h2>
+      <button class="btn btn-primary btn-large" @click="$router.push('/settings')">
+        Configurar
+      </button>
     </section>
 
     <!-- Container for final message -->
@@ -76,12 +84,71 @@ export default {
       getIsPlayable: ['game/getIsPlayable'],
     }),
   },
+  mounted() {
+    if (this.getIsPlayable) {
+      window.addEventListener('keydown', this.keyDownHanlder);
+      this.displayWord();
+    }
+  },
+  beforeDestroy() {
+    window.removeEventListener('keydown', this.keyDownHanlder);
+  },
   methods: {
     ...mapActions({
       setStartPlayingStatus: 'teams/setStartPlayingStatus',
     }),
     displayWord() {
+      this.$refs.wordEl.innerHTML = `
+        ${this.getPlayingTeamActiveWord.name
+    .split('')
+    .map(
+      (letter) => `
+                <span class="letter">
+                    ${this.correctLetters.includes(letter) ? letter : ''}
+                </span>
+            `,
+    )
+    .join('')}
+        `;
 
+      const innerWord = this.$refs.wordEl.innerText.replace(/ /g, '');
+
+      if (innerWord === this.getPlayingTeamActiveWord.name) {
+        /*    finalMessage.innerText = 'Parabéns! Ganhou! 😃';
+      popup.style.display = 'flex';
+
+      playable = false; */
+
+        alert('Guess');
+      }
+    },
+    showNotification() {
+      alert('showNotification');
+    },
+    updateWrongLettersEl() {
+      alert('updateWrongLettersEl');
+    },
+    keyDownHanlder(e) {
+      if (e.keyCode >= 65 && e.keyCode <= 90) {
+        const letter = e.key.toLowerCase();
+        console.log('TCL: created -> letter', letter);
+
+        if (this.getPlayingTeamActiveWord.name.toLowerCase().includes(letter)) {
+          if (!this.correctLetters.includes(letter)) {
+            this.correctLetters.push(letter);
+
+            this.displayWord();
+          } else {
+            this.showNotification();
+          }
+        } else if (!this.wrongLetters.includes(letter)) {
+          this.wrongLetters.push(letter);
+
+          this.updateWrongLettersEl();
+        } else {
+          this.showNotification();
+        }
+      }
     },
   },
 };

@@ -15,12 +15,20 @@ const getters = {
   getAllTeams: (state) => state.teams,
   getTeamById: (state) => (payload) => state.teams.find((team) => team.id === payload),
   getTotalTeams: (state) => state.teams.length,
-  getPlayingTeam: (state) => state.teams.find((team) => team.isPlaying),
-  getPlayingTeamActiveWord: (state) => {
+  /*   getPlayingTeam: (state) => state.teams.find((team) => team.isPlaying), */
+  getPlayingTeam: (state) => state.teams[state.teamTurnIndex],
+  /*   getPlayingTeamActiveWord: (state) => {
     const playingTeam = state.teams.find((team) => team.isPlaying);
     if (playingTeam !== undefined && playingTeam.words) {
       const activeWord = playingTeam.words.find((word) => word.isActive);
       return activeWord;
+    }
+    return undefined;
+  }, */
+  getPlayingTeamActiveWord: (state) => {
+    const playingTeam = state.teams[state.teamTurnIndex];
+    if (playingTeam !== undefined && playingTeam.words) {
+      return playingTeam.words[state.wordTurnIndex];
     }
     return undefined;
   },
