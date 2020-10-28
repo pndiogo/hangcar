@@ -2,6 +2,9 @@
   <main class="main-container settings-container">
     <div class="page-header">
       <h1>Configurar jogo</h1>
+      <button class="btn btn-primary btn-large" @click="startGame" :disabled="!getAreAllTeamsValid">
+        Jogar
+      </button>
     </div>
 
     <section class="section-container categories-container">
@@ -15,6 +18,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 import Categories from '../components/Categories.vue';
 import Teams from '../components/Teams.vue';
 
@@ -23,6 +27,20 @@ export default {
   components: {
     appCategories: Categories,
     appTeams: Teams,
+  },
+  computed: {
+    ...mapGetters({
+      getAreAllTeamsValid: ['teams/getAreAllTeamsValid'],
+    }),
+  },
+  methods: {
+    ...mapActions({
+      setAndStartGame: 'game/setAndStartGame',
+    }),
+    startGame() {
+      this.setAndStartGame();
+      this.$router.push('/');
+    },
   },
 };
 </script>

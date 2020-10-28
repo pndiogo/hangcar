@@ -7,6 +7,7 @@ const state = () => ({
   teams: [],
   teamTurnIndex: null,
   wordTurnIndex: null,
+  areAllTeamsValid: false,
 });
 
 // getters
@@ -17,9 +18,17 @@ const getters = {
   getPlayingTeam: (state) => state.teams.find((team) => team.isPlaying),
   getPlayingTeamActiveWord: (state) => {
     const playingTeam = state.teams.find((team) => team.isPlaying);
-    const activeWord = playingTeam.words.find((word) => word.isActive);
-
-    return activeWord;
+    if (playingTeam !== undefined && playingTeam.words) {
+      const activeWord = playingTeam.words.find((word) => word.isActive);
+      return activeWord;
+    }
+    return undefined;
+  },
+  getAreAllTeamsValid: (state) => {
+    if (state.teams.length > 0) {
+      return state.teams.every((team) => team.isValid);
+    }
+    return false;
   },
 
 };

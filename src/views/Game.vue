@@ -1,9 +1,9 @@
 <template>
   <main class="main-container">
     <h1>Jogo do Carrinho</h1>
-    <p>Encontre a palavra escondida - Insira uma letra</p>
+    <p>Encontre a palavra escondida</p>
 
-    <section class="game-container">
+    <section v-if="getIsPlayable" class="game-container">
       <svg height="260" width="400" class="figure-container">
         <!-- Chassis -->
         <line x1="100" y1="0" x2="100" y2="100" class="figure-part" />
@@ -30,18 +30,16 @@
             Categoria {{ getPlayingTeamActiveWord && getPlayingTeamActiveWord.category.name }}
           </h2>
         </div>
-
-        <div class="wrong-letters-container">
-          <div id="wrong-letters"></div>
-        </div>
-
-        <div class="word" id="word"></div>
       </div>
     </section>
 
-    <div class="actions-container">
-      <button class="btn btn-primary" @click="setStartPlayingStatus">Jogar</button>
-    </div>
+    <section class="game-word-container">
+      <p>Insira uma letra</p>
+      <div class="wrong-letters-container">
+        <div id="wrong-letters"></div>
+      </div>
+      <div class="word" id="word"></div>
+    </section>
 
     <!-- Container for final message -->
     <div class="popup-container" id="popup-container">
@@ -65,19 +63,26 @@ import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'Game',
   data() {
-    return {};
+    return {
+      correctLetters: [],
+      wrongLetters: [],
+    };
   },
   computed: {
     ...mapGetters({
       allTeams: ['teams/getAllTeams'],
       getPlayingTeam: ['teams/getPlayingTeam'],
       getPlayingTeamActiveWord: ['teams/getPlayingTeamActiveWord'],
+      getIsPlayable: ['game/getIsPlayable'],
     }),
   },
   methods: {
     ...mapActions({
       setStartPlayingStatus: 'teams/setStartPlayingStatus',
     }),
+    displayWord() {
+
+    },
   },
 };
 </script>
