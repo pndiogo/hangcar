@@ -13,7 +13,7 @@
         stroke-linecap: round;
 
         .figure-part {
-            //display: none;
+            display: none;
         }
     }
 
@@ -62,11 +62,14 @@
     left: 0;
     bottom: 0;
     right: 0;
-    /* display: flex; */
     display: none;
     align-items: center;
     justify-content: center;
     background-color: rgba(0, 0, 0, 0.3);
+
+    &.show {
+        display: flex;
+    }
 
     .popup {
         padding: 20px;

@@ -36,9 +36,12 @@
     <section v-if="getIsPlayable" class="game-word-container">
       <p>Insira uma letra</p>
       <div class="wrong-letters-container">
-        <div id="wrong-letters"></div>
+        <p v-if="this.wrongLetters.length > 0">Erradas</p>
+        <div id="wrong-letters" ref="wrongLettersEl"></div>
       </div>
-      <div class="word" id="word" ref="wordEl">
+      <div class="correct-word-container">
+        <p v-if="this.correctLetters.length > 0">Palavra</p>
+        <div class="word" id="word" ref="wordEl"></div>
       </div>
     </section>
 
@@ -50,16 +53,25 @@
     </section>
 
     <!-- Container for final message -->
-    <div class="popup-container" id="popup-container">
+    <div id="popup-container" class="popup-container" :class="{ show: showPopup }">
       <div class="popup">
-        <h2 id="final-message"></h2>
-        <h3 id="final-message-reveal-word"></h3>
-        <button id="play-button" class="btn btn-primary">Jogar de novo</button>
+        <h2 id="final-message">{{ popupMessage }}</h2>
+        <h3 id="final-message-reveal-word">{{ popupText }}</h3>
+        <button class="btn btn-primary" @click="checkGamePlayability">
+          {{ canGameContinue ? "Continuar" : "Jogar de novo" }}
+        </button>
+        <button v-if="!canGameContinue" class="btn btn-primary" @click="$router.push('/settings')">
+          Configurar
+        </button>
       </div>
     </div>
 
     <!-- Notification -->
-    <div class="notification-container" id="notification-container">
+    <div
+      id="notification-container"
+      class="notification-container"
+      :class="{ show: showNotification }"
+    >
       <p>Já selecionou esta letra</p>
     </div>
   </main>
@@ -68,12 +80,18 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 
+let figureParts;
+
 export default {
   name: 'Game',
   data() {
     return {
       correctLetters: [],
       wrongLetters: [],
+      showNotification: false,
+      showPopup: false,
+      popupMessage: '',
+      popupText: '',
     };
   },
   computed: {
@@ -82,12 +100,17 @@ export default {
       getPlayingTeam: ['teams/getPlayingTeam'],
       getPlayingTeamActiveWord: ['teams/getPlayingTeamActiveWord'],
       getIsPlayable: ['game/getIsPlayable'],
+      getCurrentTeamIsLast: ['game/getCurrentTeamIsLast'],
+      getCurrentWordIsLast: ['game/getCurrentWordIsLast'],
     }),
+    canGameContinue() {
+      return !(this.getCurrentTeamIsLast && this.getCurrentWordIsLast);
+    },
   },
   mounted() {
     if (this.getIsPlayable) {
       window.addEventListener('keydown', this.keyDownHanlder);
-      this.displayWord();
+      figureParts = document.querySelectorAll('.figure-part');
     }
   },
   beforeDestroy() {
@@ -95,7 +118,12 @@ export default {
   },
   methods: {
     ...mapActions({
-      setStartPlayingStatus: 'teams/setStartPlayingStatus',
+      startGame: 'game/startGame',
+      endGame: 'game/endGame',
+      activateNextTeam: 'game/activateNextTeam',
+      activateFirstTeam: 'game/activateFirstTeam',
+      activateNextWord: 'game/activateNextWord',
+      addPointToPlayingTeamScore: 'teams/addPointToPlayingTeamScore',
     }),
     displayWord() {
       this.$refs.wordEl.innerHTML = `
@@ -110,43 +138,98 @@ export default {
     )
     .join('')}
         `;
-
-      const innerWord = this.$refs.wordEl.innerText.replace(/ /g, '');
-
-      if (innerWord === this.getPlayingTeamActiveWord.name) {
-        /*    finalMessage.innerText = 'Parabéns! Ganhou! 😃';
-      popup.style.display = 'flex';
-
-      playable = false; */
-
-        alert('Guess');
-      }
     },
-    showNotification() {
-      alert('showNotification');
+    showNotificationHandler() {
+      this.showNotification = true;
+
+      setTimeout(() => {
+        this.showNotification = false;
+      }, 2000);
     },
     updateWrongLettersEl() {
-      alert('updateWrongLettersEl');
+      this.$refs.wrongLettersEl.innerHTML = `
+        ${this.wrongLetters.map((letter) => ` ${letter}`)}
+    `;
+    },
+    updateFigureParts() {
+      figureParts.forEach((part, index) => {
+        const errors = this.wrongLetters.length;
+
+        if (index < errors) {
+          // eslint-disable-next-line
+          part.style.display = "block";
+        } else {
+          // eslint-disable-next-line
+          part.style.display = "none";
+        }
+      });
+    },
+    checkIfLost() {
+      const word = this.$refs.wordEl.innerText.replace(/ /g, '');
+
+      if (word === this.getPlayingTeamActiveWord.name) {
+        //* won
+        this.popupMessage = 'Parabéns! Acertou! 😃';
+        this.popupText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
+        this.showPopup = true;
+
+        // add one point to score
+        this.addPointToPlayingTeamScore();
+      } else if (this.wrongLetters.length === figureParts.length) {
+        //* lost
+        this.popupMessage = 'Infelizmente não acertou. 😕';
+        this.popupText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
+        this.showPopup = true;
+      }
+    },
+    checkGamePlayability() {
+      //* check if is last team and last word
+      if (this.getCurrentTeamIsLast && this.getCurrentWordIsLast) {
+        console.log(1);
+        this.startGame();
+        //* check if last team
+        //* if not, activate next team with same word category
+      } else if (!this.getCurrentTeamIsLast) {
+        console.log(2);
+        this.activateNextTeam();
+        //* check if last team
+        //* if it is, but there's categories, activate first team with next category
+      } else if (this.getCurrentTeamIsLast && !this.getCurrentWordIsLast) {
+        console.log(3);
+        this.activateFirstTeam();
+        this.activateNextWord();
+      }
+
+      this.resetBoard();
+      this.showPopup = false;
+    },
+    resetBoard() {
+      this.correctLetters = [];
+      this.wrongLetters = [];
+      this.displayWord();
+      this.updateWrongLettersEl();
+      this.updateFigureParts();
     },
     keyDownHanlder(e) {
       if (e.keyCode >= 65 && e.keyCode <= 90) {
         const letter = e.key.toLowerCase();
-        console.log('TCL: created -> letter', letter);
 
         if (this.getPlayingTeamActiveWord.name.toLowerCase().includes(letter)) {
           if (!this.correctLetters.includes(letter)) {
             this.correctLetters.push(letter);
-
             this.displayWord();
+            this.checkIfLost();
           } else {
-            this.showNotification();
+            this.showNotificationHandler();
           }
         } else if (!this.wrongLetters.includes(letter)) {
           this.wrongLetters.push(letter);
 
           this.updateWrongLettersEl();
+          this.checkIfLost();
+          this.updateFigureParts();
         } else {
-          this.showNotification();
+          this.showNotificationHandler();
         }
       }
     },

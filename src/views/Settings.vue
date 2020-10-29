@@ -2,7 +2,7 @@
   <main class="main-container settings-container">
     <div class="page-header">
       <h1>Configurar jogo</h1>
-      <button class="btn btn-primary btn-large" @click="startGame" :disabled="!getAreAllTeamsValid">
+      <button class="btn btn-primary btn-large" @click="start" :disabled="!getAreAllTeamsValid">
         Jogar
       </button>
     </div>
@@ -35,10 +35,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      setAndStartGame: 'game/setAndStartGame',
+      startGame: 'game/startGame',
     }),
-    startGame() {
-      this.setAndStartGame();
+    start() {
+      this.startGame();
       this.$router.push('/');
     },
   },

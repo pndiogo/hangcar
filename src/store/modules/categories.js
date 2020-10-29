@@ -8,6 +8,7 @@ const state = () => ({
 // getters
 const getters = {
   getAllCategories: (state) => state.categories,
+  getTotalCategories: (state) => state.categories.length,
 };
 
 // mutations

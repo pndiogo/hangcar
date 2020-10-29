@@ -5,8 +5,6 @@ import { nanoid } from 'nanoid';
 // state
 const state = () => ({
   teams: [],
-  teamTurnIndex: null,
-  wordTurnIndex: null,
   areAllTeamsValid: false,
 });
 
@@ -15,20 +13,13 @@ const getters = {
   getAllTeams: (state) => state.teams,
   getTeamById: (state) => (payload) => state.teams.find((team) => team.id === payload),
   getTotalTeams: (state) => state.teams.length,
-  /*   getPlayingTeam: (state) => state.teams.find((team) => team.isPlaying), */
-  getPlayingTeam: (state) => state.teams[state.teamTurnIndex],
-  /*   getPlayingTeamActiveWord: (state) => {
-    const playingTeam = state.teams.find((team) => team.isPlaying);
+  // eslint-disable-next-line
+  getPlayingTeam: (state, getters, rootState, rootGetters) => state.teams[rootGetters['game/getCurrentTeamIndex']],
+  // eslint-disable-next-line
+  getPlayingTeamActiveWord: (state, getters, rootState, rootGetters) => {
+    const playingTeam = state.teams[rootGetters['game/getCurrentTeamIndex']];
     if (playingTeam !== undefined && playingTeam.words) {
-      const activeWord = playingTeam.words.find((word) => word.isActive);
-      return activeWord;
-    }
-    return undefined;
-  }, */
-  getPlayingTeamActiveWord: (state) => {
-    const playingTeam = state.teams[state.teamTurnIndex];
-    if (playingTeam !== undefined && playingTeam.words) {
-      return playingTeam.words[state.wordTurnIndex];
+      return playingTeam.words[rootGetters['game/getCurrentWordIndex']];
     }
     return undefined;
   },
@@ -48,8 +39,8 @@ const mutations = {
       id: nanoid(),
       name: '',
       words: [],
+      score: 0,
       isValid: false,
-      isPlaying: false,
     });
   },
   UPDATE_TEAM: (state, payload) => {
@@ -74,24 +65,13 @@ const mutations = {
       }
     });
   },
-  SET_START_PLAYING_STATUS: (state) => {
-    if (state.teams.length > 0) {
-      state.teams.forEach((team, index) => {
-        team.words.forEach((word) => {
-          word.isActive = false;
-        });
-
-        if (index === 0) {
-          team.isPlaying = true;
-          team.words[0].isActive = true;
-        } else {
-          team.isPlaying = false;
-        }
-      });
-
-      state.teamTurnIndex = 0;
-      state.wordTurnIndex = 0;
-    }
+  // eslint-disable-next-line
+  ADD_POINT: (state, payload) => {
+    state.teams[payload].score += 1;
+  },
+  RESET_POINTS: (state) => {
+    // eslint-disable-next-line
+    state.teams.forEach((team) => team.score = 0);
   },
 };
 
@@ -112,8 +92,11 @@ const actions = {
   removeWordDeletedCategoryFromTeams: ({ commit }, payload) => {
     commit('REMOVE_WORD_CATEGORY', payload);
   },
-  setStartPlayingStatus: ({ commit }) => {
-    commit('SET_START_PLAYING_STATUS');
+  addPointToPlayingTeamScore: ({ commit, rootGetters }) => {
+    commit('ADD_POINT', rootGetters['game/getCurrentTeamIndex']);
+  },
+  resetTeamsPoints: ({ commit }) => {
+    commit('RESET_POINTS');
   },
 };
 

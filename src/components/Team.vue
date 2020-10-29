@@ -132,7 +132,6 @@ export default {
           id: this.team.id,
           name,
           words,
-          isActive: false,
         });
 
         this.toggleEditMode();
@@ -158,18 +157,14 @@ export default {
     handleNewCategories(categories) {
       categories.forEach((category) => {
         if (!this.words[category.id]) {
-          console.log('WORD NOT FOUND');
           this.words[category.id] = {
             id: nanoid(),
             name: '',
             category,
-            isActive: false,
           };
 
           this.isEditMode = true;
           this.setTeamToInvalidById(this.team);
-        } else {
-          console.log('WORD FOUND');
         }
       });
 
