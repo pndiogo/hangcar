@@ -1,8 +1,9 @@
 .btn {
-    padding: 10px 25px;
+    height: 38px;
+    padding: 0 25px;
     background: $color-white;
     border: none;
-    border-radius: 20px;
+    border-radius: 18px;
     color: $color-primary;
     font-size: 16px;
     font-weight: 700;
@@ -40,8 +41,9 @@
     }
 
     &.btn-secondary {
-        background: $color-secondary;
-        color: $color-white;
+        background: $color-white;
+        color: $color-primary;
+        border: 1px solid $color-primary;
 
         &:hover {
             background: $color-primary;
@@ -57,13 +59,19 @@
     }
 
     &.btn-small {
-        padding: 8px 16px;
+        padding: 0 16px;
         font-size: 14px;
     }
 
     &.btn-large {
-        padding: 10px 60px;
+        padding: 0 60px;
         font-size: 20px;
+
+        &:disabled {
+
+                background: $color-white;
+            
+        }
     }
 
 }

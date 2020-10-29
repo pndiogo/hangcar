@@ -36,7 +36,7 @@
           class="app-input word-input"
           type="text"
           placeholder="Inserir palavra"
-          @input="showWordsError = false"
+          @input="showWordsError === true ? showWordsError = false : false"
           :disabled="!isEditMode"
         />
       </div>

@@ -3,7 +3,7 @@
 }
 
 body {
-    background-color: $color-secondary;
+    background-color: $color-secondary-light;
     color: #fff;
     font-family: Arial, Helvetica, sans-serif;
     display: flex;
@@ -57,7 +57,7 @@ h1 {
     }
 }
 
-.empty-container{
+.empty-container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -65,7 +65,7 @@ h1 {
     height: 300px;
 
     > img {
-        opacity: .9;
+        opacity: 0.9;
     }
 }
 
@@ -82,5 +82,10 @@ h1 {
 .actions-container {
     display: flex;
     justify-content: flex-end;
+    height: 38px;
     margin-top: 20px;
+}
+
+.error-message {
+    color: $color-red;
 }

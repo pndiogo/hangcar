@@ -4,6 +4,7 @@ $isDesktopSmall: "1024px";
 // Colors
 $color-primary: #292929;
 $color-secondary: #34495e;
+$color-secondary-light: lighten( $color-secondary, 15% );
 $color-accent: #c9e42f;
 $color-red: #c91212;
 $color-white: #fff;

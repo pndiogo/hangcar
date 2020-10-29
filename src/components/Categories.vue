@@ -14,10 +14,12 @@
           type="text"
           placeholder="Nome da categoria"
           v-model.trim="category.name"
+          @input="showCategoriesError === true ? showCategoriesError = false : false"
           :disabled="!isEditMode"
         />
         <button v-if="isEditMode" class="btn-icon" @click="deleteCategory(category.id)">X</button>
       </div>
+      <p v-if="showCategoriesError" class="error-message">Pelo menos uma categoria obrigatória</p>
     </div>
 
     <div class="actions-container">
@@ -41,6 +43,7 @@ export default {
     return {
       categories: [],
       isEditMode: null,
+      showCategoriesError: false,
     };
   },
   computed: {
@@ -50,7 +53,7 @@ export default {
   },
   created() {
     if (this.allCategories.length > 0) {
-      // existing categories
+      //* already existing categories
       this.isEditMode = false;
       this.categories = [...this.allCategories];
     } else {
@@ -65,6 +68,9 @@ export default {
       removeWordDeletedCategoryFromTeams: 'teams/removeWordDeletedCategoryFromTeams',
     }),
     addNewCategory() {
+      // eslint-disable-next-line
+      this.showCategoriesError === true ? this.showCategoriesError = false : false;
+
       this.categories.push({
         id: nanoid(),
         name: '',
@@ -86,8 +92,17 @@ export default {
       }
     },
     validation(categories) {
-      const isValid = categories.length > 0
-        && categories.some((category) => category.name);
+      let isValid;
+
+      if (categories.length === 0) {
+        isValid = false;
+      } else {
+        isValid = categories.length > 0
+          && categories.some((category) => category.name);
+      }
+
+      // eslint-disable-next-line
+      !isValid ? this.showCategoriesError = true : this.showCategoriesError = false;
 
       return isValid;
     },
