@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      name: null,
+      name: '',
       words: {},
       showNameError: false,
       showWordsError: false,
@@ -141,7 +141,6 @@ export default {
     validation(name, words) {
       const isNameValid = name.length > 0;
       const areWordsValid = words.every((word) => word.name);
-      console.log('TCL: validation -> areWordsValid', areWordsValid);
 
       if (!isNameValid) {
         this.showNameError = true;
@@ -158,9 +157,6 @@ export default {
     },
     handleNewCategories(categories) {
       categories.forEach((category) => {
-        console.log(this.words[category.id]);
-        console.log(this.words);
-        console.log(category.id);
         if (!this.words[category.id]) {
           console.log('WORD NOT FOUND');
           this.words[category.id] = {
@@ -187,7 +183,6 @@ export default {
     },
     handleExistingWords(words) {
       words.forEach((word) => {
-        console.log(word);
         this.words[word.category.id] = {
           ...word,
         };
