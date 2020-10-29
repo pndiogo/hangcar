@@ -73,7 +73,7 @@ export default {
       words: {},
       showNameError: false,
       showWordsError: false,
-      isEditMode: true,
+      isEditMode: null,
     };
   },
   computed: {
@@ -83,34 +83,25 @@ export default {
   },
   watch: {
     allCategories: {
-      immediate: true,
       handler(newCategories) {
-        newCategories.forEach((category) => {
-          if (!this.words[category.id]) {
-            this.words[category.id] = {
-              id: nanoid(),
-              name: '',
-              category,
-              isActive: false,
-            };
-
-            this.isEditMode = true;
-            this.setTeamToInvalidById(this.team);
-          }
-        });
-
-        // eslint-disable-next-line
-        for (const word in this.words) {
-          const x = newCategories.findIndex((category) => category.id === word);
-          if (x === -1) {
-            delete this.words[word];
-          }
-        }
+        this.handleNewCategories(newCategories);
       },
     },
   },
   created() {
-    this.name = this.team.name;
+    if (this.team.name) {
+      this.name = this.team.name;
+    }
+
+    if (this.team.words.length === 0) {
+      //* new team
+      this.isEditMode = true;
+      this.handleNewCategories(this.allCategories);
+    } else {
+      //* existing team
+      this.isEditMode = false;
+      this.handleExistingWords(this.team.words);
+    }
   },
   methods: {
     ...mapActions({
@@ -150,6 +141,7 @@ export default {
     validation(name, words) {
       const isNameValid = name.length > 0;
       const areWordsValid = words.every((word) => word.name);
+      console.log('TCL: validation -> areWordsValid', areWordsValid);
 
       if (!isNameValid) {
         this.showNameError = true;
@@ -163,6 +155,43 @@ export default {
     },
     toggleEditMode() {
       this.isEditMode = !this.isEditMode;
+    },
+    handleNewCategories(categories) {
+      categories.forEach((category) => {
+        console.log(this.words[category.id]);
+        console.log(this.words);
+        console.log(category.id);
+        if (!this.words[category.id]) {
+          console.log('WORD NOT FOUND');
+          this.words[category.id] = {
+            id: nanoid(),
+            name: '',
+            category,
+            isActive: false,
+          };
+
+          this.isEditMode = true;
+          this.setTeamToInvalidById(this.team);
+        } else {
+          console.log('WORD FOUND');
+        }
+      });
+
+      // eslint-disable-next-line
+        for (const word in this.words) {
+        const x = categories.findIndex((category) => category.id === word);
+        if (x === -1) {
+          delete this.words[word];
+        }
+      }
+    },
+    handleExistingWords(words) {
+      words.forEach((word) => {
+        console.log(word);
+        this.words[word.category.id] = {
+          ...word,
+        };
+      });
     },
   },
 };

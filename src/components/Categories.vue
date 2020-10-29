@@ -40,7 +40,7 @@ export default {
   data() {
     return {
       categories: [],
-      isEditMode: true,
+      isEditMode: null,
     };
   },
   computed: {
@@ -49,11 +49,15 @@ export default {
     }),
   },
   created() {
-    /*  if (this.allCategories.length > 0) {
+    if (this.allCategories.length > 0) {
+      // existing categories
+      this.isEditMode = false;
       this.categories = [...this.allCategories];
-    } else { */
-    this.addNewCategory();
-    /*  } */
+    } else {
+      //* is new game
+      this.isEditMode = true;
+      this.addNewCategory();
+    }
   },
   methods: {
     ...mapActions({
