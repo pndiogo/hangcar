@@ -1,28 +1,35 @@
 .app-input-wrapper {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 
-    + .app-input-wrapper {
-        margin-top: 10px;
-    }
+  + .app-input-wrapper {
+    margin-top: 10px;
+  }
 }
 
 .app-input {
-    width: calc(50% - 30px);
-    padding: 10px 5px;
-    font-size: 18px;
-    color: $color-primary;
-    border: none;
-    border-bottom: 2px solid $color-accent;
-    transition: $transition-primary;
+  width: calc(50% - 30px);
+  padding: 10px 5px;
+  font-family: inherit;
+  font-size: 18px;
+  color: $color-primary;
+  border: none;
+  border-bottom: 2px solid $color-accent;
+  border-image: linear-gradient(45deg, $color-gradient-1, $color-gradient-2) 1;
+  transition: $transition-primary;
 
-    &::placeholder {
-        opacity: .8;
-    }
+  &::placeholder {
+    opacity: 0.8;
+  }
 
-    &:disabled {
-        border-color: $color-primary;
-        background: transparent;
-    }
+  &:disabled {
+    border-color: $color-primary;
+    background: transparent;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $color-primary;
+  }
 }

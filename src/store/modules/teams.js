@@ -1,6 +1,6 @@
 /* eslint no-shadow: ["error", { "allow": ["state"] }] */
 
-import { nanoid } from 'nanoid';
+import { nanoid } from "nanoid";
 
 // state
 const state = () => ({
@@ -17,9 +17,9 @@ const getters = {
   getPlayingTeam: (state, getters, rootState, rootGetters) => state.teams[rootGetters['game/getCurrentTeamIndex']],
   // eslint-disable-next-line
   getPlayingTeamActiveWord: (state, getters, rootState, rootGetters) => {
-    const playingTeam = state.teams[rootGetters['game/getCurrentTeamIndex']];
+    const playingTeam = state.teams[rootGetters["game/getCurrentTeamIndex"]];
     if (playingTeam !== undefined && playingTeam.words) {
-      return playingTeam.words[rootGetters['game/getCurrentWordIndex']];
+      return playingTeam.words[rootGetters["game/getCurrentWordIndex"]];
     }
     return undefined;
   },
@@ -29,7 +29,6 @@ const getters = {
     }
     return false;
   },
-
 };
 
 // mutations
@@ -37,7 +36,7 @@ const mutations = {
   ADD_NEW_TEAM: (state) => {
     state.teams.push({
       id: nanoid(),
-      name: '',
+      name: "",
       words: [],
       score: 0,
       isValid: false,
@@ -69,34 +68,41 @@ const mutations = {
   ADD_POINT: (state, payload) => {
     state.teams[payload].score += 1;
   },
-  RESET_POINTS: (state) => {
+  SET_POINTS: (state, payload) => {
     // eslint-disable-next-line
-    state.teams.forEach((team) => team.score = 0);
+    state.teams.forEach((team) => team.score = 10 * payload);
+  },
+  SUBTRACT_POINT: (state, payload) => {
+    const foundTeam = state.teams.find((team) => team.id === payload);
+    foundTeam.score -= 1;
   },
 };
 
 // actions
 const actions = {
   addNewTeam: ({ commit }) => {
-    commit('ADD_NEW_TEAM');
+    commit("ADD_NEW_TEAM");
   },
   updateTeam: ({ commit }, payload) => {
-    commit('UPDATE_TEAM', payload);
+    commit("UPDATE_TEAM", payload);
   },
   deleteTeamById: ({ commit }, payload) => {
-    commit('DELETE_TEAM_BY_ID', payload);
+    commit("DELETE_TEAM_BY_ID", payload);
   },
   setTeamToInvalidById: ({ commit }, payload) => {
-    commit('SET_TEAM_TO_INVALID_BY_ID', payload);
+    commit("SET_TEAM_TO_INVALID_BY_ID", payload);
   },
   removeWordDeletedCategoryFromTeams: ({ commit }, payload) => {
-    commit('REMOVE_WORD_CATEGORY', payload);
+    commit("REMOVE_WORD_CATEGORY", payload);
   },
   addPointToPlayingTeamScore: ({ commit, rootGetters }) => {
-    commit('ADD_POINT', rootGetters['game/getCurrentTeamIndex']);
+    commit("ADD_POINT", rootGetters["game/getCurrentTeamIndex"]);
   },
-  resetTeamsPoints: ({ commit }) => {
-    commit('RESET_POINTS');
+  setTeamsInitialPoints: ({ commit, rootGetters }) => {
+    commit("SET_POINTS", rootGetters["categories/getTotalCategories"]);
+  },
+  subtractPointToTeam: ({ commit }, payload) => {
+    commit("SUBTRACT_POINT", payload);
   },
 };
 
