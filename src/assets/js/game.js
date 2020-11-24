@@ -1,15 +1,15 @@
-document.addEventListener('DOMContentLoaded', () => {
-  const wordEl = document.getElementById('word');
-  const wrongLettersEl = document.getElementById('wrong-letters');
-  const playAgainBtn = document.getElementById('play-button');
-  const popup = document.getElementById('popup-container');
-  const notification = document.getElementById('notification-container');
-  const finalMessage = document.getElementById('final-message');
-  const finalMessageRevealWord = document.getElementById('final-message-reveal-word');
+document.addEventListener("DOMContentLoaded", () => {
+  const wordEl = document.getElementById("word");
+  const wrongLettersEl = document.getElementById("wrong-letters");
+  const playAgainBtn = document.getElementById("play-button");
+  const popup = document.getElementById("popup-container");
+  const notification = document.getElementById("notification-container");
+  const finalMessage = document.getElementById("final-message");
+  const finalMessageRevealWord = document.getElementById("final-message-reveal-word");
 
-  const figureParts = document.querySelectorAll('.figure-part');
+  const figureParts = document.querySelectorAll(".figure-part");
 
-  const words = ['babe', 'morango', 'linda', 'amorzinho', 'cogumelo'];
+  const words = ["babe", "morango", "linda", "amorzinho", "cogumelo"];
 
   let selectedWord = words[Math.floor(Math.random() * words.length)];
   // eslint-disable-next-line
@@ -22,20 +22,22 @@ document.addEventListener('DOMContentLoaded', () => {
   function displayWord() {
     wordEl.innerHTML = `
         ${selectedWord
-    .split('')
-    .map((letter) => `
+          .split("")
+          .map(
+            (letter) => `
                 <span class="letter">
-                    ${correctLetters.includes(letter) ? letter : ''}
+                    ${correctLetters.includes(letter) ? letter : ""}
                 </span>
-            `)
-    .join('')}
+            `
+          )
+          .join("")}
         `;
 
-    const innerWord = wordEl.innerText.replace(/\n/g, '');
+    const innerWord = wordEl.innerText.replace(/\n/g, "");
 
     if (innerWord === selectedWord) {
-      finalMessage.innerText = 'Parabéns! Ganhou! 😃';
-      popup.style.display = 'flex';
+      finalMessage.innerText = "Parabéns! Ganhou! 😃";
+      popup.style.display = "flex";
 
       playable = false;
     }
@@ -45,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateWrongLettersEl() {
     // Display wrong letters
     wrongLettersEl.innerHTML = `
-        ${wrongLetters.length > 0 ? '<p>Erradas</p>' : ''}
+        ${wrongLetters.length > 0 ? "<p>Erradas</p>" : ""}
         ${wrongLetters.map((letter) => ` ${letter}`)}
     `;
 
@@ -64,9 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Check if lost
     if (wrongLetters.length === figureParts.length) {
-      finalMessage.innerText = 'Infelizmente perdeu. 😕';
+      finalMessage.innerText = "Infelizmente perdeu. 😕";
       finalMessageRevealWord.innerText = `...a palavra era: ${selectedWord}`;
-      popup.style.display = 'flex';
+      popup.style.display = "flex";
 
       playable = false;
     }
@@ -74,15 +76,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Show notification
   function showNotification() {
-    notification.classList.add('show');
+    notification.classList.add("show");
 
     setTimeout(() => {
-      notification.classList.remove('show');
+      notification.classList.remove("show");
     }, 2000);
   }
 
   // Keydown letter press
-  window.addEventListener('keydown', (e) => {
+  window.addEventListener("keydown", (e) => {
     // console.log(e.keyCode);
 
     if (e.keyCode >= 65 && e.keyCode <= 90) {
@@ -107,7 +109,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Restart game and play again
-  playAgainBtn.addEventListener('click', () => {
+  playAgainBtn.addEventListener("click", () => {
     playable = true;
 
     //  Empty arrays
@@ -120,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     updateWrongLettersEl();
 
-    popup.style.display = 'none';
+    popup.style.display = "none";
   });
 
   displayWord();

@@ -21,7 +21,7 @@ const mutations = {
 // actions
 const actions = {
   updateCategories: ({ commit }, payload) => {
-    commit('UPDATE_CATEGORIES', payload);
+    commit("UPDATE_CATEGORIES", payload);
   },
 };
 

@@ -1,5 +1,8 @@
 <template>
-  <div class="team-container" :class="{'is-invalid': !this.team.isValid, 'is-editing': isEditMode}">
+  <div
+    class="team-container"
+    :class="{ 'is-invalid': !this.team.isValid, 'is-editing': isEditMode }"
+  >
     <div class="title-container">
       <h3 class="title">Equipa</h3>
       <button class="btn-icon title-action" @click="deleteTeam">X</button>
@@ -14,7 +17,7 @@
         @input="showNameError = false"
         :disabled="!isEditMode"
       />
-      <p v-if="showNameError" class="error-message">Nome é obrigatório</p>
+      <p v-if="showNameError" class="error-message">Nome obrigatório</p>
 
       <h3 v-if="words.length > 0" class="title">Palavras</h3>
 
@@ -36,18 +39,16 @@
           class="app-input word-input"
           type="text"
           placeholder="Inserir palavra"
-          @input="showWordsError === true ? showWordsError = false : false"
+          @input="showWordsError === true ? (showWordsError = false) : false"
           :disabled="!isEditMode"
         />
       </div>
 
-      <p v-if="showWordsError" class="error-message">Palavras são obrigatórias</p>
+      <p v-if="showWordsError" class="error-message">Palavra obrigatória</p>
     </div>
 
     <div class="actions-container">
-      <button v-if="isEditMode" class="btn btn-secondary" @click="saveTeam">
-        Guardar
-      </button>
+      <button v-if="isEditMode" class="btn btn-primary" @click="saveTeam">Guardar</button>
       <button v-else class="btn-icon" @click="toggleEditMode">
         <img src="../assets/svg/edit-round.svg" alt="Editar" />
       </button>
@@ -56,11 +57,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { nanoid } from 'nanoid';
+import { mapActions, mapGetters } from "vuex";
+import { nanoid } from "nanoid";
 
 export default {
-  name: 'Team',
+  name: "Team",
   props: {
     team: {
       type: Object,
@@ -69,7 +70,7 @@ export default {
   },
   data() {
     return {
-      name: '',
+      name: "",
       words: {},
       showNameError: false,
       showWordsError: false,
@@ -78,7 +79,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allCategories: ['categories/getAllCategories'],
+      allCategories: ["categories/getAllCategories"],
     }),
   },
   watch: {
@@ -105,15 +106,15 @@ export default {
   },
   methods: {
     ...mapActions({
-      updateTeam: 'teams/updateTeam',
-      deleteTeamById: 'teams/deleteTeamById',
-      setTeamToInvalidById: 'teams/setTeamToInvalidById',
+      updateTeam: "teams/updateTeam",
+      deleteTeamById: "teams/deleteTeamById",
+      setTeamToInvalidById: "teams/setTeamToInvalidById",
     }),
     addNewWord() {
       this.words.push({
         id: nanoid(),
-        category: '',
-        word: '',
+        category: "",
+        word: "",
       });
 
       this.showWordsError = false;
@@ -159,7 +160,7 @@ export default {
         if (!this.words[category.id]) {
           this.words[category.id] = {
             id: nanoid(),
-            name: '',
+            name: "",
             category,
           };
 
@@ -169,7 +170,7 @@ export default {
       });
 
       // eslint-disable-next-line
-        for (const word in this.words) {
+      for (const word in this.words) {
         const x = categories.findIndex((category) => category.id === word);
         if (x === -1) {
           delete this.words[word];

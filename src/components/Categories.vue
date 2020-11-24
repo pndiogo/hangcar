@@ -2,7 +2,7 @@
   <div>
     <div class="title-container">
       <h2 class="title">Categorias</h2>
-      <button class="btn btn-primary" :disabled="!isEditMode" @click="addNewCategory">
+      <button class="btn btn-secondary" :disabled="!isEditMode" @click="addNewCategory">
         Adicionar categoria
       </button>
     </div>
@@ -14,18 +14,16 @@
           type="text"
           placeholder="Nome da categoria"
           v-model.trim="category.name"
-          @input="showCategoriesError === true ? showCategoriesError = false : false"
+          @input="showCategoriesError === true ? (showCategoriesError = false) : false"
           :disabled="!isEditMode"
         />
         <button v-if="isEditMode" class="btn-icon" @click="deleteCategory(category.id)">X</button>
       </div>
-      <p v-if="showCategoriesError" class="error-message">Pelo menos uma categoria obrigatória</p>
+      <p v-if="showCategoriesError" class="error-message">Categoria obrigatória</p>
     </div>
 
     <div class="actions-container">
-      <button v-if="isEditMode" class="btn btn-secondary" @click="saveCategories">
-        Guardar
-      </button>
+      <button v-if="isEditMode" class="btn btn-primary" @click="saveCategories">Guardar</button>
       <button v-else class="btn-icon" @click="toggleEditMode">
         <img src="../assets/svg/edit-round.svg" alt="Editar" />
       </button>
@@ -34,11 +32,11 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-import { nanoid } from 'nanoid';
+import { mapActions, mapGetters } from "vuex";
+import { nanoid } from "nanoid";
 
 export default {
-  name: 'Categories',
+  name: "Categories",
   data() {
     return {
       categories: [],
@@ -48,7 +46,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allCategories: ['categories/getAllCategories'],
+      allCategories: ["categories/getAllCategories"],
     }),
   },
   created() {
@@ -64,8 +62,8 @@ export default {
   },
   methods: {
     ...mapActions({
-      updateCategories: 'categories/updateCategories',
-      removeWordDeletedCategoryFromTeams: 'teams/removeWordDeletedCategoryFromTeams',
+      updateCategories: "categories/updateCategories",
+      removeWordDeletedCategoryFromTeams: "teams/removeWordDeletedCategoryFromTeams",
     }),
     addNewCategory() {
       // eslint-disable-next-line
@@ -73,7 +71,7 @@ export default {
 
       this.categories.push({
         id: nanoid(),
-        name: '',
+        name: "",
       });
     },
     deleteCategory(id) {
@@ -97,8 +95,7 @@ export default {
       if (categories.length === 0) {
         isValid = false;
       } else {
-        isValid = categories.length > 0
-          && categories.some((category) => category.name);
+        isValid = categories.length > 0 && categories.some((category) => category.name);
       }
 
       // eslint-disable-next-line

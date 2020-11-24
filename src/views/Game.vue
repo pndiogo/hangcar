@@ -1,46 +1,50 @@
 <template>
   <main class="main-container">
-    <h1>Jogo do Carrinho</h1>
-    <p>Encontre a palavra escondida</p>
+    <header class="page-header">
+      <h1>Jogo do Carrinho</h1>
+      <h3>Encontre a palavra escondida</h3>
+    </header>
 
     <section v-if="getIsPlayable" class="game-container">
-      <svg height="260" width="400" class="figure-container">
-        <!-- Chassis -->
-        <line x1="100" y1="0" x2="100" y2="100" class="figure-part" />
-        <line x1="100" y1="2" x2="300" y2="2" class="figure-part" />
-        <line x1="300" y1="0" x2="300" y2="100" class="figure-part" />
-        <line x1="0" y1="100" x2="400" y2="100" class="figure-part" />
+      <div class="figure-container">
+        <svg height="260" width="400" class="figure">
+          <!-- Chassis -->
+          <line x1="100" y1="0" x2="100" y2="100" class="figure-part" />
+          <line x1="100" y1="2" x2="300" y2="2" class="figure-part" />
+          <line x1="300" y1="0" x2="300" y2="100" class="figure-part" />
+          <line x1="0" y1="100" x2="400" y2="100" class="figure-part" />
 
-        <line x1="2" y1="100" x2="2" y2="185" class="figure-part" />
-        <line x1="398" y1="100" x2="398" y2="185" class="figure-part" />
-        <line x1="0" y1="185" x2="400" y2="185" class="figure-part" />
+          <line x1="2" y1="100" x2="2" y2="185" class="figure-part" />
+          <line x1="398" y1="100" x2="398" y2="185" class="figure-part" />
+          <line x1="0" y1="185" x2="400" y2="185" class="figure-part" />
 
-        <line x1="200" y1="0" x2="200" y2="185" class="figure-part" />
+          <line x1="200" y1="0" x2="200" y2="185" class="figure-part" />
 
-        <!-- Wheels -->
-        <circle cx="85" cy="220" r="35" class="figure-part" />
-        <circle cx="315" cy="220" r="35" class="figure-part" />
-      </svg>
-
+          <!-- Wheels -->
+          <circle cx="85" cy="220" r="35" class="figure-part" />
+          <circle cx="315" cy="220" r="35" class="figure-part" />
+        </svg>
+      </div>
       <div v-if="getIsPlayable" class="status-container">
         <div class="player">
-          <h4>Sua vez</h4>
+          <h3>Sua vez</h3>
           <h2>Equipa {{ getPlayingTeam && getPlayingTeam.name }}</h2>
-          <h2>
-            Categoria {{ getPlayingTeamActiveWord && getPlayingTeamActiveWord.category.name }}
-          </h2>
+          <h3>Categoria</h3>
+          <h2>{{ getPlayingTeamActiveWord && getPlayingTeamActiveWord.category.name }}</h2>
+        </div>
+        <div class="instructions">
+          <p>Insira uma letra...</p>
         </div>
       </div>
     </section>
 
     <section v-if="getIsPlayable" class="game-word-container">
-      <p>Insira uma letra</p>
       <div class="wrong-letters-container">
-        <p v-if="this.wrongLetters.length > 0">Erradas</p>
+        <h3 v-if="this.wrongLetters.length > 0">Letras erradas</h3>
         <div id="wrong-letters" ref="wrongLettersEl"></div>
       </div>
       <div class="correct-word-container">
-        <p v-if="this.correctLetters.length > 0">Palavra</p>
+        <h2>Palavra</h2>
         <div class="word" id="word" ref="wordEl"></div>
       </div>
     </section>
@@ -78,30 +82,30 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+import { mapGetters, mapActions } from "vuex";
 
 let figureParts;
 
 export default {
-  name: 'Game',
+  name: "Game",
   data() {
     return {
       correctLetters: [],
       wrongLetters: [],
       showNotification: false,
       showPopup: false,
-      popupMessage: '',
-      popupText: '',
+      popupMessage: "",
+      popupText: "",
     };
   },
   computed: {
     ...mapGetters({
-      allTeams: ['teams/getAllTeams'],
-      getPlayingTeam: ['teams/getPlayingTeam'],
-      getPlayingTeamActiveWord: ['teams/getPlayingTeamActiveWord'],
-      getIsPlayable: ['game/getIsPlayable'],
-      getCurrentTeamIsLast: ['game/getCurrentTeamIsLast'],
-      getCurrentWordIsLast: ['game/getCurrentWordIsLast'],
+      allTeams: ["teams/getAllTeams"],
+      getPlayingTeam: ["teams/getPlayingTeam"],
+      getPlayingTeamActiveWord: ["teams/getPlayingTeamActiveWord"],
+      getIsPlayable: ["game/getIsPlayable"],
+      getCurrentTeamIsLast: ["game/getCurrentTeamIsLast"],
+      getCurrentWordIsLast: ["game/getCurrentWordIsLast"],
     }),
     canGameContinue() {
       return !(this.getCurrentTeamIsLast && this.getCurrentWordIsLast);
@@ -109,34 +113,36 @@ export default {
   },
   mounted() {
     if (this.getIsPlayable) {
-      window.addEventListener('keydown', this.keyDownHanlder);
-      figureParts = document.querySelectorAll('.figure-part');
+      window.addEventListener("keydown", this.keyDownHanlder);
+      figureParts = document.querySelectorAll(".figure-part");
+      this.displayWord();
     }
   },
   beforeDestroy() {
-    window.removeEventListener('keydown', this.keyDownHanlder);
+    window.removeEventListener("keydown", this.keyDownHanlder);
   },
   methods: {
     ...mapActions({
-      startGame: 'game/startGame',
-      endGame: 'game/endGame',
-      activateNextTeam: 'game/activateNextTeam',
-      activateFirstTeam: 'game/activateFirstTeam',
-      activateNextWord: 'game/activateNextWord',
-      addPointToPlayingTeamScore: 'teams/addPointToPlayingTeamScore',
+      startGame: "game/startGame",
+      endGame: "game/endGame",
+      activateNextTeam: "game/activateNextTeam",
+      activateFirstTeam: "game/activateFirstTeam",
+      activateNextWord: "game/activateNextWord",
+      addPointToPlayingTeamScore: "teams/addPointToPlayingTeamScore",
+      subtractPointToTeam: "teams/subtractPointToTeam",
     }),
     displayWord() {
       this.$refs.wordEl.innerHTML = `
         ${this.getPlayingTeamActiveWord.name
-    .split('')
-    .map(
-      (letter) => `
+          .split("")
+          .map(
+            (letter) => `
                 <span class="letter">
-                    ${this.correctLetters.includes(letter) ? letter : ''}
+                    ${this.correctLetters.includes(letter) ? letter : ""}
                 </span>
-            `,
-    )
-    .join('')}
+            `
+          )
+          .join("")}
         `;
     },
     showNotificationHandler() {
@@ -157,19 +163,19 @@ export default {
 
         if (index < errors) {
           // eslint-disable-next-line
-          part.style.display = "block";
+          part.classList.add('is-visible')
         } else {
           // eslint-disable-next-line
-          part.style.display = "none";
+          part.classList.remove('is-visible')
         }
       });
     },
     checkIfLost() {
-      const word = this.$refs.wordEl.innerText.replace(/ /g, '');
+      const word = this.$refs.wordEl.innerText.replace(/ /g, "");
 
       if (word === this.getPlayingTeamActiveWord.name) {
         //* won
-        this.popupMessage = 'Parabéns! Acertou! 😃';
+        this.popupMessage = "Parabéns! Acertou! 😃";
         this.popupText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
         this.showPopup = true;
 
@@ -177,7 +183,7 @@ export default {
         this.addPointToPlayingTeamScore();
       } else if (this.wrongLetters.length === figureParts.length) {
         //* lost
-        this.popupMessage = 'Infelizmente não acertou. 😕';
+        this.popupMessage = "Infelizmente não acertou. 😕";
         this.popupText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
         this.showPopup = true;
       }
@@ -228,6 +234,7 @@ export default {
           this.updateWrongLettersEl();
           this.checkIfLost();
           this.updateFigureParts();
+          this.subtractPointToTeam(this.getPlayingTeam.id);
         } else {
           this.showNotificationHandler();
         }

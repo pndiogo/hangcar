@@ -1,107 +1,105 @@
 .btn {
-    height: 38px;
-    padding: 0 25px;
-    background: $color-white;
-    border: none;
-    border-radius: 18px;
-    color: $color-primary;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: $transition-primary;
+  height: 38px;
+  padding: 0 25px;
+  background: $color-white;
+  border: none;
+  border-radius: 18px;
+  font-family: inherit;
+  color: $color-primary;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: $transition-primary;
 
-    &:focus {
-        outline: 0;
-    }
+  &:focus {
+    outline: 0;
+  }
 
-    &:active {
-        transform: scale(0.98);
+  &:active {
+    transform: scale(0.98);
+  }
+
+  &:disabled {
+    opacity: 0.7;
+    //pointer-events: none;
+    cursor: not-allowed;
+  }
+
+  &.btn-primary {
+    background: $color-accent;
+
+    &:hover {
+      background: $color-primary;
+      color: $color-white;
     }
 
     &:disabled {
-        opacity: 0.7;
-        //pointer-events: none;
-        cursor: not-allowed;
-    }
-
-    &.btn-primary {
+      &:hover {
         background: $color-accent;
-
-        &:hover {
-            background: $color-primary;
-            color: $color-white;
-        }
-
-        &:disabled {
-            &:hover {
-                background: $color-accent;
-                color: $color-primary;
-            }
-        }
-    }
-
-    &.btn-secondary {
-        background: $color-white;
         color: $color-primary;
-        border: 1px solid $color-primary;
+      }
+    }
+  }
 
-        &:hover {
-            background: $color-primary;
-            color: $color-white;
-        }
+  &.btn-secondary {
+    background: $color-white;
+    color: $color-primary;
+    border: 1px solid $color-primary;
 
-        &:disabled {
-            &:hover {
-                background: $color-secondary;
-                color: $color-white;
-            }
-        }
+    &:hover {
+      background: $color-primary;
+      color: $color-white;
     }
 
-    &.btn-small {
-        padding: 0 16px;
-        font-size: 14px;
+    &:disabled {
+      &:hover {
+        background: $color-secondary;
+        color: $color-white;
+      }
     }
+  }
 
-    &.btn-large {
-        padding: 0 60px;
-        font-size: 20px;
+  &.btn-small {
+    padding: 0 16px;
+    font-size: 14px;
+  }
 
-        &:disabled {
-            background: $color-white;
-            
-            &:hover {
-                background: $color-white;
-            }
-        }
+  &.btn-large {
+    padding: 0 60px;
+    font-size: 20px;
+
+    &:disabled,
+    &:disabled:hover {
+      background: $color-white;
     }
+  }
 }
 
 .btn-icon {
-    padding: 5px;
-    background: transparent;
-    border: 0;
+  padding: 5px;
+  background: transparent;
+  border: 0;
+  color: $color-primary;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: $transition-primary;
+
+  &:focus {
+    outline: 0;
+  }
+
+  &:hover {
+    color: $color-red;
+  }
+
+  &:active {
     color: $color-primary;
-    font-size: 16px;
-    font-weight: 700;
-    cursor: pointer;
-    transition: $transition-primary;
+  }
 
-    &:focus {
-        outline: 0;
-    }
-
-    &:hover {
-        color: $color-red;
-    }
-
-    &:active {
-        color: $color-primary;
-    }
-
-    > img {
-        display: block;
-        width: 28px;
-        height: 28px;
-    }
+  > img {
+      display: block;
+      width: 28px;
+      height: 28px;
+  }
 }

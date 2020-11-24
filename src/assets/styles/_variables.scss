@@ -8,9 +8,12 @@ $color-secondary-light: lighten( $color-secondary, 15% );
 $color-accent: #c9e42f;
 $color-red: #c91212;
 $color-white: #fff;
+$color-gradient-1: #80b2a5;
+$color-gradient-2: #4d8dc1;
 
 /* Fonts */
-$font-primary: "Roboto", sans-serif;
+$font-family-primary: 'Varela Round', sans-serif;
+$font-family-title: 'Bowlby One SC', cursive;
 
 // Shadows
 $shadow-primary: 0 2px 8px 3px rgba(0, 0, 0, 0.09);

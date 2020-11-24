@@ -46,20 +46,20 @@ const mutations = {
 // actions
 const actions = {
   startGame: ({ commit, dispatch }) => {
-    commit('START_GAME');
-    dispatch('teams/resetTeamsPoints', null, { root: true });
+    commit("START_GAME");
+    dispatch("teams/setTeamsInitialPoints", null, { root: true });
   },
   endGame: ({ commit }) => {
-    commit('END_GAME');
+    commit("END_GAME");
   },
   activateNextTeam: ({ commit }) => {
-    commit('NEXT_TEAM');
+    commit("NEXT_TEAM");
   },
   activateFirstTeam: ({ commit }) => {
-    commit('FIRST_TEAM');
+    commit("FIRST_TEAM");
   },
   activateNextWord: ({ commit }) => {
-    commit('NEXT_WORD');
+    commit("NEXT_WORD");
   },
 };
 

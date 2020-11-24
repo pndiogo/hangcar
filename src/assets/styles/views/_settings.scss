@@ -11,7 +11,10 @@
 
 .team-container {
     padding: 15px;
-    border: 1px solid $color-primary;
+    border: 2px solid $color-primary;
     border-radius: 5px;
+    border-image: linear-gradient(45deg, $color-gradient-1, $color-gradient-2) 1;
     box-shadow: $shadow-secondary;
+    background-origin: border-box;
+    background-clip: content-box, border-box;
 }

@@ -14,32 +14,38 @@
     <section class="section-container">
       <app-teams></app-teams>
     </section>
+
+    <div class="actions-container">
+      <button class="btn btn-primary btn-large" @click="start" :disabled="!getAreAllTeamsValid">
+        Jogar
+      </button>
+    </div>
   </main>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
-import Categories from '../components/Categories.vue';
-import Teams from '../components/Teams.vue';
+import { mapGetters, mapActions } from "vuex";
+import Categories from "../components/Categories.vue";
+import Teams from "../components/Teams.vue";
 
 export default {
-  name: 'Settings',
+  name: "Settings",
   components: {
     appCategories: Categories,
     appTeams: Teams,
   },
   computed: {
     ...mapGetters({
-      getAreAllTeamsValid: ['teams/getAreAllTeamsValid'],
+      getAreAllTeamsValid: ["teams/getAreAllTeamsValid"],
     }),
   },
   methods: {
     ...mapActions({
-      startGame: 'game/startGame',
+      startGame: "game/startGame",
     }),
     start() {
       this.startGame();
-      this.$router.push('/');
+      this.$router.push("/");
     },
   },
 };

@@ -2,7 +2,7 @@
   <div>
     <div class="title-container">
       <h2 class="title">Equipas</h2>
-      <button class="btn btn-primary" @click="addNewTeam" :disabled="allCategories.length === 0">
+      <button class="btn btn-secondary" @click="addNewTeam" :disabled="allCategories.length === 0">
         Adicionar equipa
       </button>
     </div>
@@ -18,23 +18,23 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters } from "vuex";
 
 export default {
-  name: 'Teams',
+  name: "Teams",
   components: {
-    appTeam: () => import('../components/Team'),
-    appEmptyContainer: () => import('../components/EmptyContainer'),
+    appTeam: () => import("../components/Team"),
+    appEmptyContainer: () => import("../components/EmptyContainer"),
   },
   computed: {
     ...mapGetters({
-      allTeams: ['teams/getAllTeams'],
-      allCategories: ['categories/getAllCategories'],
+      allTeams: ["teams/getAllTeams"],
+      allCategories: ["categories/getAllCategories"],
     }),
   },
   methods: {
     ...mapActions({
-      addNewTeam: 'teams/addNewTeam',
+      addNewTeam: "teams/addNewTeam",
     }),
   },
 };
