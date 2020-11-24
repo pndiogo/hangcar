@@ -68,12 +68,13 @@
         font-size: 20px;
 
         &:disabled {
-
-                background: $color-white;
+            background: $color-white;
             
+            &:hover {
+                background: $color-white;
+            }
         }
     }
-
 }
 
 .btn-icon {
