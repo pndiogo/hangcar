@@ -1,0 +1,19 @@
+.nav {
+    padding: 20px 0;
+  
+    .nav__link {
+        font-size: $font-size-xxs;
+        color: $color-white;
+        opacity: 0.5;
+        transition: $transition-primary;
+
+        &.exact-is-active,
+        &:hover {
+            opacity: 1;
+        }
+
+        &.exact-is-active {
+            color: $color-accent;
+        }
+    }
+  }

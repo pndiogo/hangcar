@@ -1,8 +1,18 @@
 <template>
-  <main class="main-container">
-    <header class="page-header">
-      <h1>Jogo do Carrinho</h1>
-      <h3>Encontre a palavra escondida</h3>
+  <main class="main-container" :class="{ 'main-container--no-play': !getIsPlayable }">
+    <section v-if="!getIsPlayable" class="game-no-play-container">
+      <h1 class="app-title app-title--xl text-color-accent">Jogo do Carrinho</h1>
+      <h2 class="app-title app-title--l">Encontre a palavra escondida</h2>
+      <h3 class="app-title app-title--m">É preciso configurar o jogo</h3>
+      <button class="btn btn--primary btn--extra-large" @click="$router.push('/settings')">
+        Configurar
+      </button>
+    </section>
+
+    <header v-if="getIsPlayable" class="app-header">
+      <h1 class="app-title app-title--l text-color-accent">Jogo do Carrinho</h1>
+      <h2 class="app-title app-title--s">Encontre a palavra escondida</h2>
+      <h4 class="app-title app-title--xs">Insira uma letra...</h4>
     </header>
 
     <section v-if="getIsPlayable" class="game-container">
@@ -27,33 +37,31 @@
       </div>
       <div v-if="getIsPlayable" class="status-container">
         <div class="player">
-          <h3>Sua vez</h3>
-          <h2>Equipa {{ getPlayingTeam && getPlayingTeam.name }}</h2>
-          <h3>Categoria</h3>
-          <h2>{{ getPlayingTeamActiveWord && getPlayingTeamActiveWord.category.name }}</h2>
-        </div>
-        <div class="instructions">
-          <p>Insira uma letra...</p>
+          <div class="player__turn">
+            <h3 class="app-title app-title--m">Sua vez</h3>
+            <p class="app-text app-text--s">Equipa {{ getPlayingTeam && getPlayingTeam.name }}</p>
+          </div>
+
+          <div class="player__category">
+            <h3 class="app-title app-title--m">Categoria</h3>
+            <p class="app-text app-text--s">
+              {{ getPlayingTeamActiveWord && getPlayingTeamActiveWord.category.name }}
+            </p>
+          </div>
         </div>
       </div>
     </section>
 
     <section v-if="getIsPlayable" class="game-word-container">
-      <div class="wrong-letters-container">
-        <h3 v-if="this.wrongLetters.length > 0">Letras erradas</h3>
-        <div id="wrong-letters" ref="wrongLettersEl"></div>
-      </div>
       <div class="correct-word-container">
-        <h2>Palavra</h2>
-        <div class="word" id="word" ref="wordEl"></div>
+        <h4 class="app-title app-title--s text-color-accent">Palavra</h4>
+        <div class="word app-text app-text--m" id="word" ref="wordEl"></div>
       </div>
-    </section>
 
-    <section v-if="!getIsPlayable" class="game-not-ready-container">
-      <h2 class="title">É preciso configurar o jogo</h2>
-      <button class="btn btn-primary btn-large" @click="$router.push('/settings')">
-        Configurar
-      </button>
+      <div class="wrong-letters-container">
+        <h4 class="app-title app-title--s text-color-orange">Letras erradas</h4>
+        <div class="app-text app-text--m" id="wrong-letters" ref="wrongLettersEl"></div>
+      </div>
     </section>
 
     <!-- Container for final message -->
@@ -61,10 +69,10 @@
       <div class="popup">
         <h2 id="final-message">{{ popupMessage }}</h2>
         <h3 id="final-message-reveal-word">{{ popupText }}</h3>
-        <button class="btn btn-primary" @click="checkGamePlayability">
+        <button class="btn btn--primary" @click="checkGamePlayability">
           {{ canGameContinue ? "Continuar" : "Jogar de novo" }}
         </button>
-        <button v-if="!canGameContinue" class="btn btn-primary" @click="$router.push('/settings')">
+        <button v-if="!canGameContinue" class="btn btn--primary" @click="$router.push('/settings')">
           Configurar
         </button>
       </div>

@@ -1,0 +1,76 @@
+html {
+    font-size: 62.5%;
+}
+
+.app-title {
+    margin-top: 0;
+    font-family: $font-family-title;
+    letter-spacing: 2px;
+    word-spacing: 1px;
+    
+    &--xl {
+        margin-bottom: $spacing-l;
+        font-size: $font-size-xl;
+    }
+
+    &--l {
+        margin-bottom: $spacing-m;
+        font-size: $font-size-l;
+    }
+
+    &--m {
+        margin-bottom: $spacing-m;
+        font-size: $font-size-m;
+    }
+    
+    &--s {
+        margin-bottom: $spacing-m;
+        font-size: $font-size-s;
+    }
+  
+    &--xs {
+        margin-bottom: $spacing-s;
+        font-size: $font-size-xs;
+    }
+}
+
+.section-title {
+    margin: 0;
+
+    &--s {
+        font-size: $font-size-s;
+    }
+
+    &--xs {
+        font-size: $font-size-xs;
+    }
+   
+    &--xxs {
+        font-size: $font-size-xxs;
+    }
+}
+
+.app-text {
+    margin: 0;
+    font-family: $font-family-primary;
+
+    &--s {
+        font-size: $font-size-s;
+    }
+
+    &--m {
+        font-size: $font-size-m;
+    }
+
+    &--l {
+        font-size: $font-size-l;
+    }
+}
+
+.text-color-accent {
+    color: $color-accent;
+}
+
+.text-color-orange {
+    color: $color-orange;
+}

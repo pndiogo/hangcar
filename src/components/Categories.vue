@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="title-container">
-      <h2 class="title">Categorias</h2>
-      <button class="btn btn-secondary" :disabled="!isEditMode" @click="addNewCategory">
+    <div class="section-title-container">
+      <h2 class="section-title section-title--s">Categorias</h2>
+      <button class="btn btn--secondary" :disabled="!isEditMode" @click="addNewCategory">
         Adicionar categoria
       </button>
     </div>
@@ -23,7 +23,7 @@
     </div>
 
     <div class="actions-container">
-      <button v-if="isEditMode" class="btn btn-primary" @click="saveCategories">Guardar</button>
+      <button v-if="isEditMode" class="btn btn--primary" @click="saveCategories">Guardar</button>
       <button v-else class="btn-icon" @click="toggleEditMode">
         <img src="../assets/svg/edit-round.svg" alt="Editar" />
       </button>

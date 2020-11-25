@@ -1,8 +1,8 @@
 <template>
   <main class="main-container settings-container">
     <div class="page-header">
-      <h1>Configurar jogo</h1>
-      <button class="btn btn-primary btn-large" @click="start" :disabled="!getAreAllTeamsValid">
+      <h1 class="app-title app-title--m">Configurar jogo</h1>
+      <button class="btn btn--primary btn--large" @click="start" :disabled="!getAreAllTeamsValid">
         Jogar
       </button>
     </div>
@@ -16,7 +16,7 @@
     </section>
 
     <div class="actions-container">
-      <button class="btn btn-primary btn-large" @click="start" :disabled="!getAreAllTeamsValid">
+      <button class="btn btn--primary btn--large" @click="start" :disabled="!getAreAllTeamsValid">
         Jogar
       </button>
     </div>

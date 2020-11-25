@@ -1,14 +1,16 @@
 // Global
-@import "fonts.scss";
-@import "variables.scss";
+@import "fonts";
+@import "variables";
+@import "typography";
 @import "animations";
 @import "base";
 
 // Components
-@import "./components/team";
-@import "./components/buttons";
-@import "./components/inputs";
+@import "components/nav";
+@import "components/team";
+@import "components/buttons";
+@import "components/inputs";
 
 // Views
-@import "./views/game";
-@import "./views/settings";
+@import "views/game";
+@import "views/settings";

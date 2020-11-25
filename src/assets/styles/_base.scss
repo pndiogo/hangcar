@@ -17,12 +17,6 @@ body {
   animation: main-bkg 30s ease infinite;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-family: $font-family-title;
-  letter-spacing: 2px;
-  word-spacing: 1px;
-}
-
 .app {
   width: 80%;
   max-width: 1024px;
@@ -30,22 +24,7 @@ h1, h2, h3, h4, h5, h6 {
   padding-bottom: 60px;
 }
 
-.nav {
-  padding: 20px 0;
-
-  a {
-    color: #fff;
-    opacity: 0.5;
-    transition: $transition-primary;
-
-    &.exact-is-active,
-    &:hover {
-      opacity: 1;
-    }
-  }
-}
-
-.page-header {
+.app-header {
   text-align: center;
 }
 
@@ -79,14 +58,10 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
-.title-container {
+.section-title-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  > .title {
-    margin-top: 0;
-  }
 }
 
 .actions-container {

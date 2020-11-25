@@ -1,15 +1,20 @@
 .app-input-wrapper {
   display: flex;
-  justify-content: space-between;
+  //justify-content: space-between;
   align-items: center;
 
   + .app-input-wrapper {
     margin-top: 10px;
   }
+
+  .btn-icon {
+    align-self: flex-end;
+  }
 }
 
 .app-input {
   width: calc(50% - 30px);
+  margin-right: 20px;
   padding: 10px 5px;
   font-family: inherit;
   font-size: 18px;

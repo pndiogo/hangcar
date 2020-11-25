@@ -8,8 +8,9 @@
         > .sub-titles,
         > .words {
             display: flex;
+            margin-top: 20px;
 
-            > .sub-title,
+            > .section-title,
             > .word-input {
                 flex: 1;
 
@@ -18,7 +19,7 @@
                 }
             }
 
-            > .sub-title {
+            > .section-title {
                 margin-bottom: 0;
 
                 &:last-child {

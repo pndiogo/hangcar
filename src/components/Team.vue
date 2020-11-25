@@ -3,8 +3,8 @@
     class="team-container"
     :class="{ 'is-invalid': !this.team.isValid, 'is-editing': isEditMode }"
   >
-    <div class="title-container">
-      <h3 class="title">Equipa</h3>
+    <div class="section-title-container">
+      <h3 class="section-title section-title--xxs">Equipa</h3>
       <button class="btn-icon title-action" @click="deleteTeam">X</button>
     </div>
 
@@ -22,8 +22,8 @@
       <h3 v-if="words.length > 0" class="title">Palavras</h3>
 
       <div class="sub-titles">
-        <h4 class="sub-title">Categoria</h4>
-        <h4 class="sub-title">Palavra</h4>
+        <h3 class="section-title section-title--xxs">Categoria</h3>
+        <h3 class="section-title section-title--xxs">Palavra</h3>
       </div>
 
       <div class="words" v-for="category in allCategories" :key="category.id">
@@ -48,7 +48,7 @@
     </div>
 
     <div class="actions-container">
-      <button v-if="isEditMode" class="btn btn-primary" @click="saveTeam">Guardar</button>
+      <button v-if="isEditMode" class="btn btn--primary" @click="saveTeam">Guardar</button>
       <button v-else class="btn-icon" @click="toggleEditMode">
         <img src="../assets/svg/edit-round.svg" alt="Editar" />
       </button>
