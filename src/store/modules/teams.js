@@ -95,9 +95,6 @@ const actions = {
   removeWordDeletedCategoryFromTeams: ({ commit }, payload) => {
     commit("REMOVE_WORD_CATEGORY", payload);
   },
-  addPointToPlayingTeamScore: ({ commit, rootGetters }) => {
-    commit("ADD_POINT", rootGetters["game/getCurrentTeamIndex"]);
-  },
   setTeamsInitialPoints: ({ commit, rootGetters }) => {
     commit("SET_POINTS", rootGetters["categories/getTotalCategories"]);
   },

@@ -1,10 +1,19 @@
 <template>
   <main class="main-container" :class="{ 'main-container--no-play': !getIsPlayable }">
     <section v-if="!getIsPlayable" class="game-no-play-container">
-      <h1 class="app-title app-title--xl text-color-accent">Jogo do Carrinho</h1>
-      <h2 class="app-title app-title--l">Encontre a palavra escondida</h2>
-      <h3 class="app-title app-title--m">É preciso configurar o jogo</h3>
-      <button class="btn btn--primary btn--extra-large" @click="$router.push('/settings')">
+      <h1 class="app-title app-title--xl text-color-accent animate__animated animate__bounceInDown">
+        Jogo do Carrinho
+      </h1>
+      <h2 class="app-title app-title--l animate__animated animate__bounceIn">
+        Encontre a palavra escondida
+      </h2>
+      <h3 class="app-title app-title--m animate__animated animate__bounceInUp">
+        É preciso configurar o jogo
+      </h3>
+      <button
+        class="btn btn--primary btn--extra-large animate__animated animate__bounceInUp"
+        @click="$router.push('/settings')"
+      >
         Configurar
       </button>
     </section>
@@ -55,36 +64,35 @@
     <section v-if="getIsPlayable" class="game-word-container">
       <div class="correct-word-container">
         <h4 class="app-title app-title--s text-color-accent">Palavra</h4>
-        <div class="word app-text app-text--m" id="word" ref="wordEl"></div>
+        <div class="word app-text app-text--m" ref="wordEl"></div>
       </div>
 
       <div class="wrong-letters-container">
         <h4 class="app-title app-title--s text-color-orange">Letras erradas</h4>
-        <div class="app-text app-text--m" id="wrong-letters" ref="wrongLettersEl"></div>
+        <div class="app-text app-text--m" ref="wrongLettersEl"></div>
       </div>
     </section>
 
     <!-- Container for final message -->
-    <div id="popup-container" class="popup-container" :class="{ show: showPopup }">
-      <div class="popup">
-        <h2 id="final-message">{{ popupMessage }}</h2>
-        <h3 id="final-message-reveal-word">{{ popupText }}</h3>
-        <button class="btn btn--primary" @click="checkGamePlayability">
-          {{ canGameContinue ? "Continuar" : "Jogar de novo" }}
-        </button>
-        <button v-if="!canGameContinue" class="btn btn--primary" @click="$router.push('/settings')">
-          Configurar
-        </button>
+    <div class="modal-container" :class="{ show: showModal }">
+      <div class="modal">
+        <div class="modal__body">
+          <h1 class="app-title app-title--m">{{ modalMessage }}</h1>
+          <h2 class="app-title app-title--s">{{ modalText }}</h2>
+        </div>
+        <div class="modal__footer">
+          <button class="btn btn--primary" @click="checkGamePlayability">
+            {{ canGameContinue ? "Continuar" : "Jogar de novo" }}
+          </button>
+          <button
+            v-if="!canGameContinue"
+            class="btn btn--secondary"
+            @click="$router.push('/settings')"
+          >
+            Configurar
+          </button>
+        </div>
       </div>
-    </div>
-
-    <!-- Notification -->
-    <div
-      id="notification-container"
-      class="notification-container"
-      :class="{ show: showNotification }"
-    >
-      <p>Já selecionou esta letra</p>
     </div>
   </main>
 </template>
@@ -100,10 +108,9 @@ export default {
     return {
       correctLetters: [],
       wrongLetters: [],
-      showNotification: false,
-      showPopup: false,
-      popupMessage: "",
-      popupText: "",
+      showModal: false,
+      modalMessage: "",
+      modalText: "",
     };
   },
   computed: {
@@ -123,7 +130,7 @@ export default {
     if (this.getIsPlayable) {
       window.addEventListener("keydown", this.keyDownHanlder);
       figureParts = document.querySelectorAll(".figure-part");
-      this.displayWord();
+      this.displayCorrectLetters();
     }
   },
   beforeDestroy() {
@@ -136,16 +143,19 @@ export default {
       activateNextTeam: "game/activateNextTeam",
       activateFirstTeam: "game/activateFirstTeam",
       activateNextWord: "game/activateNextWord",
-      addPointToPlayingTeamScore: "teams/addPointToPlayingTeamScore",
       subtractPointToTeam: "teams/subtractPointToTeam",
     }),
-    displayWord() {
+    displayCorrectLetters(letterToHighlight = null) {
       this.$refs.wordEl.innerHTML = `
         ${this.getPlayingTeamActiveWord.name
           .split("")
           .map(
             (letter) => `
-                <span class="letter">
+                ${
+                  letterToHighlight === letter
+                    ? '<span class="letter animate__animated animate__heartBeat">'
+                    : '<span class="letter">'
+                }
                     ${this.correctLetters.includes(letter) ? letter : ""}
                 </span>
             `
@@ -153,17 +163,26 @@ export default {
           .join("")}
         `;
     },
-    showNotificationHandler() {
-      this.showNotification = true;
-
-      setTimeout(() => {
-        this.showNotification = false;
-      }, 2000);
-    },
-    updateWrongLettersEl() {
+    displayWrongLetters(letterToHighlight = null) {
       this.$refs.wrongLettersEl.innerHTML = `
-        ${this.wrongLetters.map((letter) => ` ${letter}`)}
+        ${this.wrongLetters
+          .map(
+            (letter) => `
+          ${
+            letterToHighlight === letter
+              ? '<span class="wrong-letter animate__animated animate__heartBeat">'
+              : '<span class="wrong-letter">'
+          }
+        ${letter}
+        </span>
+        `
+          )
+          .join(", ")}
     `;
+    },
+    highlightLetter(letter, isLetterCorrect) {
+      // eslint-disable-next-line no-unused-expressions
+      isLetterCorrect ? this.displayCorrectLetters(letter) : this.displayWrongLetters(letter);
     },
     updateFigureParts() {
       figureParts.forEach((part, index) => {
@@ -178,50 +197,44 @@ export default {
         }
       });
     },
-    checkIfLost() {
+    checkTurnStatus() {
       const word = this.$refs.wordEl.innerText.replace(/ /g, "");
 
       if (word === this.getPlayingTeamActiveWord.name) {
         //* won
-        this.popupMessage = "Parabéns! Acertou! 😃";
-        this.popupText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
-        this.showPopup = true;
-
-        // add one point to score
-        this.addPointToPlayingTeamScore();
+        this.modalMessage = "Parabéns! Acertou! 😃";
+        this.modalText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
+        this.showModal = true;
       } else if (this.wrongLetters.length === figureParts.length) {
         //* lost
-        this.popupMessage = "Infelizmente não acertou. 😕";
-        this.popupText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
-        this.showPopup = true;
+        this.modalMessage = "Infelizmente não acertou. 😕";
+        this.modalText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
+        this.showModal = true;
       }
     },
     checkGamePlayability() {
       //* check if is last team and last word
       if (this.getCurrentTeamIsLast && this.getCurrentWordIsLast) {
-        console.log(1);
         this.startGame();
         //* check if last team
         //* if not, activate next team with same word category
       } else if (!this.getCurrentTeamIsLast) {
-        console.log(2);
         this.activateNextTeam();
         //* check if last team
         //* if it is, but there's categories, activate first team with next category
       } else if (this.getCurrentTeamIsLast && !this.getCurrentWordIsLast) {
-        console.log(3);
         this.activateFirstTeam();
         this.activateNextWord();
       }
 
       this.resetBoard();
-      this.showPopup = false;
+      this.showModal = false;
     },
     resetBoard() {
       this.correctLetters = [];
       this.wrongLetters = [];
-      this.displayWord();
-      this.updateWrongLettersEl();
+      this.displayCorrectLetters();
+      this.displayWrongLetters();
       this.updateFigureParts();
     },
     keyDownHanlder(e) {
@@ -231,20 +244,20 @@ export default {
         if (this.getPlayingTeamActiveWord.name.toLowerCase().includes(letter)) {
           if (!this.correctLetters.includes(letter)) {
             this.correctLetters.push(letter);
-            this.displayWord();
-            this.checkIfLost();
+            this.displayCorrectLetters();
+            this.checkTurnStatus();
           } else {
-            this.showNotificationHandler();
+            this.highlightLetter(letter, true);
           }
         } else if (!this.wrongLetters.includes(letter)) {
           this.wrongLetters.push(letter);
 
-          this.updateWrongLettersEl();
-          this.checkIfLost();
+          this.displayWrongLetters();
+          this.checkTurnStatus();
           this.updateFigureParts();
           this.subtractPointToTeam(this.getPlayingTeam.id);
         } else {
-          this.showNotificationHandler();
+          this.highlightLetter(letter, false);
         }
       }
     },

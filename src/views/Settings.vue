@@ -2,9 +2,6 @@
   <main class="main-container settings-container">
     <div class="page-header">
       <h1 class="app-title app-title--m">Configurar jogo</h1>
-      <button class="btn btn--primary btn--large" @click="start" :disabled="!getAreAllTeamsValid">
-        Jogar
-      </button>
     </div>
 
     <section class="section-container categories-container">

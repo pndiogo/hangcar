@@ -1,4 +1,5 @@
 // Global
+@import "vendors";
 @import "fonts";
 @import "variables";
 @import "typography";
@@ -10,6 +11,7 @@
 @import "components/team";
 @import "components/buttons";
 @import "components/inputs";
+@import "components/modal";
 
 // Views
 @import "views/game";

@@ -59,8 +59,8 @@
   text-align: center;
 
   .wrong-letters-container {
-    span {
-      font-size: 24px;
+    .wrong-letter {
+      display: inline-block;
     }
   }
 
@@ -88,48 +88,6 @@
   }
 }
 
-.popup-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  background-color: rgba(0, 0, 0, 0.3);
-
-  &.show {
-    display: flex;
-  }
-
-  .popup {
-    padding: 20px;
-    background: #2980b9;
-    border-radius: 5px;
-    box-shadow: 0 15px 10px 3px rgba(0, 0, 0, 0.1);
-    text-align: center;
-
-    button {
-      margin-top: 20px;
-      padding: 0 20px;
-      background-color: #fff;
-      border: 0;
-      color: #2980b9;
-      font-size: 16px;
-      cursor: pointer;
-
-      &:active {
-        transform: scale(0.98);
-      }
-
-      &:focus {
-        outline: 0;
-      }
-    }
-  }
-}
-
 .game-no-play-container {
   display: flex;
   align-items: center;
@@ -140,25 +98,6 @@
 
   .btn {
     margin-top: $spacing-l;
-  }
-}
-
-.notification-container {
-  position: fixed;
-  left: 50%;
-  bottom: -50px;
-  padding: 15px 20px;
-  background-color: rgba(0, 0, 0, 0.3);
-  border-radius: 10px 10px 0 0;
-  transform: translate(-50%, 0);
-  transition: transform 0.3s ease-in-out;
-
-  &.show {
-    transform: translate(-50%, -50px);
-  }
-
-  p {
-    margin: 0;
   }
 }
 

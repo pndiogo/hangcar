@@ -10,11 +10,13 @@ body {
   min-height: 100vh;
   margin: 0;
   background-color: $color-secondary-light;
-  background: linear-gradient(270deg, $color-gradient-1, $color-gradient-2);
-  background-size: 400% 400%;
+  // background: linear-gradient(270deg, $color-gradient-1, $color-gradient-2);
+  background: linear-gradient(0deg, $color-gradient-1, $color-gradient-2), url("../img/main-bkg.jpg");
+  // background-size: 400% 400%;
+  background-size: 100% 100%;
   color: #fff;
   line-height: 1.4;
-  animation: main-bkg 30s ease infinite;
+  // animation: main-bkg 30s ease infinite;
 }
 
 .app {

@@ -21,7 +21,7 @@
   color: $color-primary;
   border: none;
   border-bottom: 2px solid $color-accent;
-  border-image: linear-gradient(45deg, $color-gradient-1, $color-gradient-2) 1;
+  border-image: linear-gradient(45deg, $color-light-green, $color-light-blue) 1;
   transition: $transition-primary;
 
   &::placeholder {
