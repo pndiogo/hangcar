@@ -19,7 +19,8 @@
         align-items: center;
         justify-content: center;
         width: 80vh;
-        height: 50vh;   
+        max-width: 600px;
+        height: 50vh;
         padding: 40px;
         background: $color-secondary;
         border-radius: 5px;

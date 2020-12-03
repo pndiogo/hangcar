@@ -11,26 +11,31 @@ html {
     &--xl {
         margin-bottom: $spacing-l;
         font-size: $font-size-xl;
+        text-shadow: 2px 4px black;
     }
 
     &--l {
         margin-bottom: $spacing-m;
         font-size: $font-size-l;
+        text-shadow: 2px 2px black;
     }
 
     &--m {
         margin-bottom: $spacing-m;
         font-size: $font-size-m;
+        text-shadow: 2px 3px black;
     }
     
     &--s {
         margin-bottom: $spacing-m;
         font-size: $font-size-s;
+        text-shadow: 2px 2px black;
     }
   
     &--xs {
         margin-bottom: $spacing-s;
         font-size: $font-size-xs;
+        text-shadow: 2px 2px black;
     }
 }
 

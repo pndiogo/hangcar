@@ -29,6 +29,12 @@ const getters = {
     }
     return false;
   },
+  getWinner: (state) => {
+    const maxScore = Math.max(...state.teams.map((team) => team.score), 0);
+    const found = state.teams.filter((team) => team.score === maxScore);
+
+    return found;
+  },
 };
 
 // mutations

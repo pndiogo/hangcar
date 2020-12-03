@@ -11,8 +11,8 @@ $color-orange: #ffbe00;
 $color-white: #fff;
 $color-light-green: #80b2a5;
 $color-light-blue: #4d8dc1;
-$color-gradient-1: rgba(128, 178, 165, 0.1);
-$color-gradient-2: rgba(77, 141, 193, 0.3);
+$color-gradient-1: $color-light-green;
+$color-gradient-2: $color-light-blue;
 
 // Spacing
 $spacing-l: 3rem;

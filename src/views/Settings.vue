@@ -13,7 +13,11 @@
     </section>
 
     <div class="actions-container">
-      <button class="btn btn--primary btn--large" @click="start" :disabled="!getAreAllTeamsValid">
+      <button
+        class="btn btn--primary btn--large btn--shadow"
+        @click="start"
+        :disabled="!getAreAllTeamsValid"
+      >
         Jogar
       </button>
     </div>

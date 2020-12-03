@@ -11,7 +11,7 @@
         É preciso configurar o jogo
       </h3>
       <button
-        class="btn btn--primary btn--extra-large animate__animated animate__bounceInUp"
+        class="btn btn--primary btn--extra-large btn--shadow animate__animated animate__bounceInUp"
         @click="$router.push('/settings')"
       >
         Configurar
@@ -40,8 +40,8 @@
           <line x1="200" y1="0" x2="200" y2="185" class="figure-part" />
 
           <!-- Wheels -->
-          <circle cx="85" cy="220" r="35" class="figure-part" />
-          <circle cx="315" cy="220" r="35" class="figure-part" />
+          <circle cx="85" cy="222" r="35" class="figure-part" />
+          <circle cx="315" cy="222" r="35" class="figure-part" />
         </svg>
       </div>
       <div v-if="getIsPlayable" class="status-container">
@@ -77,20 +77,26 @@
     <div class="modal-container" :class="{ show: showModal }">
       <div class="modal">
         <div class="modal__body">
-          <h1 class="app-title app-title--m">{{ modalMessage }}</h1>
-          <h2 class="app-title app-title--s">{{ modalText }}</h2>
+          <h1 class="app-title app-title--m">{{ modalTitle }}</h1>
+          <h2 class="app-title app-title--s">{{ modalSubTitle }}</h2>
+
+          <h3 v-if="isGameOver" class="app-title app-title--xs">{{ modalMessage }}</h3>
+
+          <div v-if="modalStep === 'gameIsOver'"></div>
         </div>
         <div class="modal__footer">
-          <button class="btn btn--primary" @click="checkGamePlayability">
-            {{ canGameContinue ? "Continuar" : "Jogar de novo" }}
-          </button>
-          <button
-            v-if="!canGameContinue"
-            class="btn btn--secondary"
-            @click="$router.push('/settings')"
-          >
-            Configurar
-          </button>
+          <template v-if="isGameOver && modalStep === 'gameIsRunning'">
+            <button class="btn btn--primary" @click="showGameResults">Ver resultados</button>
+          </template>
+
+          <template v-if="!isGameOver || (isGameOver && modalStep === 'gameIsOver')">
+            <button class="btn btn--primary" @click="checkGamePlayability">
+              {{ isGameOver ? "Jogar de novo" : "Continuar" }}
+            </button>
+            <button v-if="isGameOver" class="btn btn--secondary" @click="$router.push('/settings')">
+              Configurar
+            </button>
+          </template>
         </div>
       </div>
     </div>
@@ -109,8 +115,10 @@ export default {
       correctLetters: [],
       wrongLetters: [],
       showModal: false,
-      modalMessage: "",
-      modalText: "",
+      modalTitle: "",
+      modalSubTitle: "",
+      modalMessage: "O jogo terminou",
+      modalStep: "gameIsRunning",
     };
   },
   computed: {
@@ -121,9 +129,10 @@ export default {
       getIsPlayable: ["game/getIsPlayable"],
       getCurrentTeamIsLast: ["game/getCurrentTeamIsLast"],
       getCurrentWordIsLast: ["game/getCurrentWordIsLast"],
+      getWinner: ["teams/getWinner"],
     }),
-    canGameContinue() {
-      return !(this.getCurrentTeamIsLast && this.getCurrentWordIsLast);
+    isGameOver() {
+      return this.getCurrentTeamIsLast && this.getCurrentWordIsLast;
     },
   },
   mounted() {
@@ -202,13 +211,13 @@ export default {
 
       if (word === this.getPlayingTeamActiveWord.name) {
         //* won
-        this.modalMessage = "Parabéns! Acertou! 😃";
-        this.modalText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
+        this.modalTitle = "Parabéns! Acertou! 😃";
+        this.modalSubTitle = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
         this.showModal = true;
       } else if (this.wrongLetters.length === figureParts.length) {
         //* lost
-        this.modalMessage = "Infelizmente não acertou. 😕";
-        this.modalText = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
+        this.modalTitle = "Infelizmente não acertou. 😕";
+        this.modalSubTitle = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
         this.showModal = true;
       }
     },
@@ -260,6 +269,10 @@ export default {
           this.highlightLetter(letter, false);
         }
       }
+    },
+    showGameResults() {
+      this.modalStep = "gameIsOver";
+      console.log("results");
     },
   },
 };
