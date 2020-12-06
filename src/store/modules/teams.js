@@ -11,6 +11,11 @@ const state = () => ({
 // getters
 const getters = {
   getAllTeams: (state) => state.teams,
+  getAllTeamsOrderedByScore: (state) => {
+    const arrayToSort = JSON.parse(JSON.stringify(state.teams));
+
+    return arrayToSort.sort((a, b) => b.score - a.score);
+  },
   getTeamById: (state) => (payload) => state.teams.find((team) => team.id === payload),
   getTotalTeams: (state) => state.teams.length,
   // eslint-disable-next-line
@@ -80,6 +85,11 @@ const mutations = {
   },
   SUBTRACT_POINT: (state, payload) => {
     const foundTeam = state.teams.find((team) => team.id === payload);
+
+    if (foundTeam.score === 0) {
+      return;
+    }
+
     foundTeam.score -= 1;
   },
 };

@@ -80,9 +80,16 @@
           <h1 class="app-title app-title--m">{{ modalTitle }}</h1>
           <h2 class="app-title app-title--s">{{ modalSubTitle }}</h2>
 
-          <h3 v-if="isGameOver" class="app-title app-title--xs">{{ modalMessage }}</h3>
+          <h3 v-if="isGameOver" class="app-title app-title--s text-color-accent">
+            {{ modalMessage }}
+          </h3>
 
-          <div v-if="modalStep === 'gameIsOver'"></div>
+          <div v-if="modalStep === 'gameIsOver'">
+            <div class="modal__results" v-for="team in getAllTeamsOrderedByScore" :key="team.id">
+              <p class="app-text app-text--xs">Equipa: {{ team.name }}</p>
+              <p class="app-text app-text--xs">Pontos: {{ team.score }}</p>
+            </div>
+          </div>
         </div>
         <div class="modal__footer">
           <template v-if="isGameOver && modalStep === 'gameIsRunning'">
@@ -117,15 +124,18 @@ export default {
       showModal: false,
       modalTitle: "",
       modalSubTitle: "",
-      modalMessage: "O jogo terminou",
+      modalMessage: "",
+      modalMessageInitialState: "O jogo terminou!",
+      modalMessageResults: "Resultados:",
       modalStep: "gameIsRunning",
     };
   },
   computed: {
     ...mapGetters({
-      allTeams: ["teams/getAllTeams"],
+      getAllTeamsOrderedByScore: ["teams/getAllTeamsOrderedByScore"],
       getPlayingTeam: ["teams/getPlayingTeam"],
       getPlayingTeamActiveWord: ["teams/getPlayingTeamActiveWord"],
+      getTotalTeams: ["teams/getTotalTeams"],
       getIsPlayable: ["game/getIsPlayable"],
       getCurrentTeamIsLast: ["game/getCurrentTeamIsLast"],
       getCurrentWordIsLast: ["game/getCurrentWordIsLast"],
@@ -240,6 +250,8 @@ export default {
       this.showModal = false;
     },
     resetBoard() {
+      this.modalStep = "gameIsRunning";
+      this.modalMessage = this.modalMessageInitialState;
       this.correctLetters = [];
       this.wrongLetters = [];
       this.displayCorrectLetters();
@@ -261,10 +273,14 @@ export default {
         } else if (!this.wrongLetters.includes(letter)) {
           this.wrongLetters.push(letter);
 
+          this.subtractPointToTeam(this.getPlayingTeam.id);
+          console.log(
+            "🚀 ~ file: Game.vue ~ line 277 ~ keyDownHanlder ~ this.getPlayingTeam.id",
+            this.getPlayingTeam.id
+          );
           this.displayWrongLetters();
           this.checkTurnStatus();
           this.updateFigureParts();
-          this.subtractPointToTeam(this.getPlayingTeam.id);
         } else {
           this.highlightLetter(letter, false);
         }
@@ -272,7 +288,35 @@ export default {
     },
     showGameResults() {
       this.modalStep = "gameIsOver";
-      console.log("results");
+      this.modalMessage = this.modalMessageResults;
+
+      // no winners, all teams with score = 0
+      const allLosers = this.getWinner.every((team) => team.score === 0);
+      // one winner
+      const oneWinner = this.getWinner.length === 1;
+      // multiple winners with tied scores
+      const tiedWinners = this.getWinner.length > 1;
+
+      if (allLosers) {
+        this.modalTitle =
+          this.getTotalTeams === 1
+            ? "Infelizmente não ganhou..."
+            : "Infelizmente ninguém ganhou...";
+        this.modalSubTitle =
+          this.getTotalTeams === 1 ? "Teve 0 pontos" : "Todas as equipas tiveram 0 pontos";
+      } else if (oneWinner) {
+        this.modalTitle = `Parabéns ${this.getWinner[0].name}! 👏`;
+        this.modalSubTitle = `Ganhou com ${this.getWinner[0].score} pontos 🎉`;
+      } else if (tiedWinners) {
+        this.modalTitle = `Parabéns, temos vários vencedores! 👏`;
+        this.modalSubTitle = this.getWinner
+          .map((winner) => {
+            return `
+            ${winner.name} 🎉
+          `;
+          })
+          .join("");
+      }
     },
   },
 };

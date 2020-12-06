@@ -7,12 +7,12 @@
       </button>
     </div>
 
-    <app-empty-container v-if="allTeams.length === 0">
+    <app-empty-container v-if="getAllTeams.length === 0">
       <h3 class="section-title section-title--xs">Não existem equipas criadas</h3>
     </app-empty-container>
 
     <section v-else class="teams-container">
-      <app-team v-for="team in allTeams" :key="team.id" :team="team"></app-team>
+      <app-team v-for="team in getAllTeams" :key="team.id" :team="team"></app-team>
     </section>
   </div>
 </template>
@@ -28,7 +28,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      allTeams: ["teams/getAllTeams"],
+      getAllTeams: ["teams/getAllTeams"],
       allCategories: ["categories/getAllCategories"],
     }),
   },
