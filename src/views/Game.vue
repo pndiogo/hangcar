@@ -112,6 +112,7 @@
 
 <script>
 import { mapGetters, mapActions } from "vuex";
+import { stringNormalize } from "../utils/utils";
 
 let figureParts;
 
@@ -164,18 +165,22 @@ export default {
       activateNextWord: "game/activateNextWord",
       subtractPointToTeam: "teams/subtractPointToTeam",
     }),
-    displayCorrectLetters(letterToHighlight = null) {
+    displayCorrectLetters(letterToHighlight = "") {
       this.$refs.wordEl.innerHTML = `
         ${this.getPlayingTeamActiveWord.name
           .split("")
           .map(
             (letter) => `
                 ${
-                  letterToHighlight === letter
+                  stringNormalize(letterToHighlight) === stringNormalize(letter)
                     ? '<span class="letter animate__animated animate__heartBeat">'
                     : '<span class="letter">'
                 }
-                    ${this.correctLetters.includes(letter) ? letter : ""}
+                    ${
+                      this.correctLetters.includes(stringNormalize(letter))
+                        ? letter.toUpperCase()
+                        : ""
+                    }
                 </span>
             `
           )
@@ -192,7 +197,7 @@ export default {
               ? '<span class="wrong-letter animate__animated animate__heartBeat">'
               : '<span class="wrong-letter">'
           }
-        ${letter}
+        ${letter.toUpperCase()}
         </span>
         `
           )
@@ -219,7 +224,7 @@ export default {
     checkTurnStatus() {
       const word = this.$refs.wordEl.innerText.replace(/ /g, "");
 
-      if (word === this.getPlayingTeamActiveWord.name) {
+      if (stringNormalize(word) === this.getPlayingTeamActiveWord.parsedName) {
         //* won
         this.modalTitle = "Parabéns! Acertou! 😃";
         this.modalSubTitle = `...a palavra era: ${this.getPlayingTeamActiveWord.name}`;
@@ -259,29 +264,31 @@ export default {
       this.updateFigureParts();
     },
     keyDownHanlder(e) {
-      if (e.keyCode >= 65 && e.keyCode <= 90) {
+      if ((e.keyCode >= 65 && e.keyCode <= 90) || e.keyCode === 186) {
         const letter = e.key.toLowerCase();
+        const parsedLetter = stringNormalize(letter);
 
-        if (this.getPlayingTeamActiveWord.name.toLowerCase().includes(letter)) {
-          if (!this.correctLetters.includes(letter)) {
-            this.correctLetters.push(letter);
+        // if letter is corect
+        if (this.getPlayingTeamActiveWord.parsedName.includes(parsedLetter)) {
+          // if letter is corect and is not displayed
+          if (!this.correctLetters.includes(parsedLetter)) {
+            this.correctLetters.push(parsedLetter);
             this.displayCorrectLetters();
             this.checkTurnStatus();
           } else {
+            // if letter is corect and displayed
             this.highlightLetter(letter, true);
           }
+          // if letter is wrong and not displayed
         } else if (!this.wrongLetters.includes(letter)) {
           this.wrongLetters.push(letter);
 
           this.subtractPointToTeam(this.getPlayingTeam.id);
-          console.log(
-            "🚀 ~ file: Game.vue ~ line 277 ~ keyDownHanlder ~ this.getPlayingTeam.id",
-            this.getPlayingTeam.id
-          );
           this.displayWrongLetters();
           this.checkTurnStatus();
           this.updateFigureParts();
         } else {
+          // if letter is wrong and displayed
           this.highlightLetter(letter, false);
         }
       }

@@ -13,7 +13,7 @@
         class="app-input name-input"
         type="text"
         placeholder="Nome da equipa"
-        v-model="name"
+        v-model.trim="name"
         @input="showNameError = false"
         :disabled="!isEditMode"
       />
@@ -59,6 +59,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { nanoid } from "nanoid";
+import { stringNormalize, stringRemoveTildeAndCarrot } from "../utils/utils";
 
 export default {
   name: "Team",
@@ -110,7 +111,7 @@ export default {
       deleteTeamById: "teams/deleteTeamById",
       setTeamToInvalidById: "teams/setTeamToInvalidById",
     }),
-    addNewWord() {
+    /*     addNewWord() {
       this.words.push({
         id: nanoid(),
         category: "",
@@ -118,7 +119,7 @@ export default {
       });
 
       this.showWordsError = false;
-    },
+    }, */
     deleteTeam() {
       this.deleteTeamById({
         id: this.team.id,
@@ -126,7 +127,13 @@ export default {
     },
     saveTeam() {
       const { name } = this;
-      const words = Object.values(this.words);
+      let words = Object.values(this.words);
+
+      words = words.map((word) => {
+        word.name = stringRemoveTildeAndCarrot(word.name);
+        word.parsedName = stringNormalize(word.name);
+        return word;
+      });
 
       if (this.validation(name, words)) {
         this.updateTeam({
@@ -161,6 +168,7 @@ export default {
           this.words[category.id] = {
             id: nanoid(),
             name: "",
+            parsedName: "",
             category,
           };
 

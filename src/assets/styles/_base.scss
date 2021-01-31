@@ -54,6 +54,9 @@ body {
   height: 300px;
 
   > img {
+    width: 100%;
+    max-width: 200px;
+    height: auto;
     opacity: 0.9;
   }
 }
